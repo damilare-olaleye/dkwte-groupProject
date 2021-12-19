@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,17 @@ public class AuthenticationController {
 
 	private static final String CURRENTUSER = "currentuser";
 
+	@GetMapping(path = "/loginstatus")
+	public ResponseEntity<Object> loginStatus() {
+		User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
+
+		if (currentlyLoggedInUser != null) {
+			return ResponseEntity.status(200).body(currentlyLoggedInUser);
+		}
+
+		return ResponseEntity.status(401).body("Not logged in");
+	}
+
 	@PostMapping(path = "/login")
 	public ResponseEntity<Object> login(@RequestBody LoginDTO dto) {
 
@@ -53,6 +65,13 @@ public class AuthenticationController {
 
 		}
 
+	}
+
+	@PostMapping(path = "/logout")
+	public ResponseEntity<String> logout() {
+		req.getSession().invalidate(); // Invalidate the session (logging out)
+
+		return ResponseEntity.status(200).body("Successfully logged out");
 	}
 
 	@PostMapping(path = "/signup")

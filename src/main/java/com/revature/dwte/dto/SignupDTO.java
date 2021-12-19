@@ -2,8 +2,6 @@ package com.revature.dwte.dto;
 
 import java.util.Objects;
 
-import com.revature.dwte.model.User;
-
 public class SignupDTO {
 
 	private String firstName;

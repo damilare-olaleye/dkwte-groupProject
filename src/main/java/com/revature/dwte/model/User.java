@@ -2,6 +2,7 @@ package com.revature.dwte.model;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,24 +14,26 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
-	private String firstName;
-	private String lastName;
+	private String first_name;
+	private String last_name;
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 	private String password;
-	private String phoneNumber;
+	@Column(name = "phone_number", nullable = false, unique = true)
+	private String phone_number;
 	private String role;
 
 	public User() {
 		super();
 	}
 
-	public User(String firstName, String lastName, String email, String password, String phoneNumber, String role) {
+	public User(String first_name, String last_name, String email, String password, String phone_number, String role) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.first_name = first_name;
+		this.last_name = last_name;
 		this.email = email;
 		this.password = password;
-		this.phoneNumber = phoneNumber;
+		this.phone_number = phone_number;
 		this.role = role;
 	}
 
@@ -42,20 +45,20 @@ public class User {
 		this.userId = userId;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getFirst_name() {
+		return first_name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getLast_name() {
+		return last_name;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setLast_name(String last_name) {
+		this.last_name = last_name;
 	}
 
 	public String getEmail() {
@@ -74,12 +77,12 @@ public class User {
 		this.password = password;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone_number() {
+		return phone_number;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone_number(String phone_number) {
+		this.phone_number = phone_number;
 	}
 
 	public String getRole() {
@@ -91,14 +94,8 @@ public class User {
 	}
 
 	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", phoneNumber=" + phoneNumber + ", role=" + role + "]";
-	}
-
-	@Override
 	public int hashCode() {
-		return Objects.hash(email, firstName, lastName, password, phoneNumber, role, userId);
+		return Objects.hash(email, first_name, last_name, password, phone_number, role, userId);
 	}
 
 	@Override
@@ -110,12 +107,17 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(email, other.email) && Objects.equals(firstName, other.firstName)
-				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
-				&& Objects.equals(phoneNumber, other.phoneNumber) && Objects.equals(role, other.role)
+		return Objects.equals(email, other.email) && Objects.equals(first_name, other.first_name)
+				&& Objects.equals(last_name, other.last_name) && Objects.equals(password, other.password)
+				&& Objects.equals(phone_number, other.phone_number) && Objects.equals(role, other.role)
 				&& userId == other.userId;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", first_name=" + first_name + ", last_name=" + last_name + ", email=" + email
+				+ ", password=" + password + ", phone_number=" + phone_number + ", role=" + role + "]";
+	}
 
+	
 }

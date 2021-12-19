@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dwte.dto.LoginDTO;
-import com.revature.dwte.dto.SignupDTO;
 import com.revature.dwte.exception.FailedAuthenticationException;
 import com.revature.dwte.exception.InvalidLoginException;
 import com.revature.dwte.exception.InvalidParameterException;
@@ -57,20 +56,17 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(path = "/signup")
-	public ResponseEntity<Object> login(@RequestBody SignupDTO dto)
+	public ResponseEntity<Object> login(@RequestBody User dto)
 			throws InvalidParameterException, NotFoundException, FailedAuthenticationException {
 
 		try {
 
 			logger.info("signup user ...");
 
-			User user = this.authService.setSignupUser(dto.getFirstName(), dto.getLastName(), dto.getEmail(),
-					dto.getPhoneNumber(), dto.getUserRole(), dto.getPassword());
+			this.authService.setSignupUser(dto.getFirst_name(), dto.getLast_name(), dto.getEmail(), dto.getPassword(),
+					dto.getPhone_number(), dto.getRole());
 
-			HttpSession session = req.getSession();
-			session.setAttribute(CURRENTUSER, user);
-
-			return ResponseEntity.status(200).body(user);
+			return ResponseEntity.status(200).body("You have successfully signed up!");
 
 		} catch (FailedAuthenticationException e) {
 

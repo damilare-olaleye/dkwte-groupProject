@@ -32,18 +32,14 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 	}
 
 	@Transactional
-	public User getSignupUser(String firstName, String lastName, String email, String phoneNumber, String role,
-			String password) {
+	public void getSignupUser(User user) {
 
 		logger.info("getSignupUser(email, password, ...");
 
-		User user = (User) entityManager.createQuery(
-				"INSERT INTO user (firstName, lastName, email, password, phoneNumber, role) VALUES (?,?,?,?,?,?)")
+		System.out.println(user);
 
-				.setParameter(1, firstName).setParameter(2, lastName).setParameter(3, email)
-				.setParameter(4, phoneNumber).setParameter(5, role).setParameter(6, password).getSingleResult();
+		this.entityManager.persist(user);
 
-		return user;
 	}
 
 	@Transactional

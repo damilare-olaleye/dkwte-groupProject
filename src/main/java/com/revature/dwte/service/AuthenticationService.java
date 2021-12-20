@@ -1,21 +1,20 @@
 package com.revature.dwte.service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.revature.dwte.dao.AuthenticationDao;
-import com.revature.dwte.exception.FailedAuthenticationException;
 import com.revature.dwte.exception.InvalidLoginException;
 import com.revature.dwte.exception.InvalidParameterException;
 import com.revature.dwte.exception.NotFoundException;
 import com.revature.dwte.model.User;
+import com.revature.dwte.utility.HashUtil;
 
 @Service
 public class AuthenticationService {
@@ -25,93 +24,64 @@ public class AuthenticationService {
 
 	private Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
-	public User setLoginUser(String email, String password) throws InvalidLoginException {
+	public User setLoginUser(String email, String password) throws InvalidLoginException, NoSuchAlgorithmException {
+		logger.info("AuthenticationService.setLoginUser() invoked");
+
+		User user = this.authenticationDao.getUserByEmail(email);
 
 		try {
-			logger.info("email, password");
 
-			User user = this.authenticationDao.getLoginUser(email, password);
+			if (user != null) {
+				String algorithm = "SHA-256";
+				String hashedInputPassword = HashUtil.hashInputPassword(password.trim(), algorithm);
 
-			return user;
+				logger.info("hashedInputPassword {}", hashedInputPassword);
+				logger.info("user.getPassword {}", user.getPassword());
+
+				Boolean isCorrectPassword = hashedInputPassword.equals(user.getPassword());
+
+				if (isCorrectPassword) {
+					return user;
+				} else {
+					throw new InvalidLoginException("Incorrect username and/or password");
+				}
+			} else {
+				throw new InvalidLoginException("Username and/or password is incorrect");
+			}
+
 		} catch (DataAccessException e) {
 			throw new InvalidLoginException("Username and/or password is incorrect");
 		}
 	}
 
 	public void setSignupUser(String firstName, String lastName, String email, String password, String phoneNumber,
-			String role) throws InvalidParameterException, NotFoundException, FailedAuthenticationException {
+			String role) throws InvalidParameterException, NotFoundException, NoSuchAlgorithmException {
+		logger.info("AuthenticationService.setSignupUser() invoked");
 
-		Set<String> userRole = new HashSet<>();
-		userRole.add("Member");
-		userRole.add("member");
-		userRole.add("Admin");
-		userRole.add("admin");
+		String algorithm = "SHA-256";
+		String hashedPassword = HashUtil.hashPassword(password.trim(), algorithm);
 
-		try {
+		// capitalize first letter of user role
+		String firstNameInput = firstName.trim();
+		String firstNameCap = firstNameInput.substring(0, 1).toUpperCase() + firstNameInput.substring(1);
 
-			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String encodedPassword = passwordEncoder.encode(password);
+		String lastNameInput = lastName.trim();
+		String lastNameCap = lastNameInput.substring(0, 1).toUpperCase() + lastNameInput.substring(1);
 
-			User user = new User(firstName, lastName, email, encodedPassword, phoneNumber, role);
+		String roleInput = role.trim();
+		String userRole = roleInput.substring(0, 1).toUpperCase() + roleInput.substring(1);
 
-			logger.info("setSignupUser(firstName, lastName, ...");
+		User user = new User(firstNameCap, lastNameCap, email.trim(), hashedPassword, phoneNumber.trim(), userRole);
 
-			if (!(userRole.contains(role))) {
-				throw new InvalidParameterException("You selected an invalid role");
-			}
+		this.authenticationDao.getSignupUser(user);
 
-			if (!(firstName.matches("[A-Z][a-z]*"))) {
-				throw new InvalidParameterException("You entered an invalid first name");
-			}
+	}
 
-			if (firstName.trim().equals("")) {
-				throw new NotFoundException("first name cannot be blank");
-			}
+	public List<User> getUserByEmailAndPhoneNumber(String email, String phone_number) {
+		logger.info("AuthenticationService.getUserByEmailAndPassword() invoked");
 
-			if (!(lastName.matches("[A-Z][a-z]*"))) {
-				throw new InvalidParameterException("You entered an invalid last name");
-			}
+		List<User> users = this.authenticationDao.getUserByEmailAndPhoneNumber(email, phone_number);
 
-			if (lastName.trim().equals("")) {
-				throw new NotFoundException("last name cannot be blank");
-			}
-
-//			if (!(email.equals("/.+@[^@]+\\.[^@]{2,}$/"))) {
-//				throw new InvalidParameterException("You entered an invalid email");
-//			}
-
-			if (email.trim().equals("")) {
-				throw new NotFoundException("email cannot be blank");
-			}
-
-			if (password.trim().equals("")) {
-				throw new NotFoundException("email cannot be blank");
-			}
-
-			if (!(password.matches("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"))) {
-				throw new InvalidParameterException(
-						"Password must contain at least one number and one uppercase and lowercase letter, "
-								+ "and at least 8 or more characters");
-
-			}
-
-			if (!(phoneNumber.matches("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$"))) {
-				throw new InvalidParameterException("Phone number input is not valid, enter correct input");
-			}
-
-			this.authenticationDao.getSignupUser(user);
-
-//			if (userd == null) {
-//				throw new FailedAuthenticationException("Cannot sign up user! Try again later");
-//
-//			}
-
-//			return userd;
-
-		} catch (NumberFormatException e) {
-
-			throw new NotFoundException("Invalid parameter was thrown");
-		}
-
+		return users;
 	}
 }

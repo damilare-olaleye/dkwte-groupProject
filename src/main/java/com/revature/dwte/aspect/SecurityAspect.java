@@ -30,7 +30,7 @@ public class SecurityAspect {
 			return ResponseEntity.status(401).body("You are not logged in");
 		}
 
-		if (!currentlyLoggedInUser.getRole().equals("Member") || !currentlyLoggedInUser.getRole().equals("member")) {
+		if (!currentlyLoggedInUser.getRole().equals("Member")) {
 			return ResponseEntity.status(401)
 					.body("You are logged in, but only members are allowed to access this endpoint");
 		}

@@ -1,50 +1,31 @@
-package com.revature.dwte.model;
+package com.revature.dwte.dto;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import com.revature.dwte.model.Restaurant;
+import com.revature.dwte.model.User;
 
-@Entity
-public class Review {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int reiviewId;
+public class AddReviewDTO {
 
 	private String ratings;
 	private String review;
 	private Timestamp submittedDate;
-
-	@ManyToOne
 	private Restaurant resturantsId;
-
-	@ManyToOne
 	private User authorId;
-
-	public Review() {
+	
+	public AddReviewDTO() {
 		super();
 	}
 
-	public Review(String ratings, String review, Timestamp submittedDate, Restaurant resturantsId, User authorId) {
+	public AddReviewDTO(String ratings, String review, Timestamp submittedDate, Restaurant resturantsId,
+			User authorId) {
 		super();
 		this.ratings = ratings;
 		this.review = review;
 		this.submittedDate = submittedDate;
 		this.resturantsId = resturantsId;
 		this.authorId = authorId;
-	}
-
-	public int getReiviewId() {
-		return reiviewId;
-	}
-
-	public void setReiviewId(int reiviewId) {
-		this.reiviewId = reiviewId;
 	}
 
 	public String getRatings() {
@@ -89,7 +70,7 @@ public class Review {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(authorId, ratings, reiviewId, resturantsId, review, submittedDate);
+		return Objects.hash(authorId, ratings, resturantsId, review, submittedDate);
 	}
 
 	@Override
@@ -100,16 +81,17 @@ public class Review {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Review other = (Review) obj;
+		AddReviewDTO other = (AddReviewDTO) obj;
 		return Objects.equals(authorId, other.authorId) && Objects.equals(ratings, other.ratings)
-				&& reiviewId == other.reiviewId && Objects.equals(resturantsId, other.resturantsId)
-				&& Objects.equals(review, other.review) && Objects.equals(submittedDate, other.submittedDate);
+				&& Objects.equals(resturantsId, other.resturantsId) && Objects.equals(review, other.review)
+				&& Objects.equals(submittedDate, other.submittedDate);
 	}
 
 	@Override
 	public String toString() {
-		return "Review [reiviewId=" + reiviewId + ", ratings=" + ratings + ", review=" + review + ", submittedDate="
-				+ submittedDate + ", resturantsId=" + resturantsId + ", authorId=" + authorId + "]";
+		return "AddReviewDTO [ratings=" + ratings + ", review=" + review + ", submittedDate=" + submittedDate
+				+ ", resturantsId=" + resturantsId + ", authorId=" + authorId + "]";
 	}
 
+	
 }

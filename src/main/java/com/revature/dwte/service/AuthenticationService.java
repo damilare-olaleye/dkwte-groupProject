@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.revature.dwte.dao.AuthenticationDao;
@@ -48,7 +49,10 @@ public class AuthenticationService {
 
 		try {
 
-			User user = new User(firstName, lastName, email, password, phoneNumber, role);
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String encodedPassword = passwordEncoder.encode(password);
+
+			User user = new User(firstName, lastName, email, encodedPassword, phoneNumber, role);
 
 			logger.info("setSignupUser(firstName, lastName, ...");
 

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.revature.dwte.dao.AuthenticationDao;
@@ -37,8 +38,8 @@ public class AuthenticationService {
 		}
 	}
 
-	public User setSignupUser(String firstName, String lastName, String email, String phoneNumber, String role,
-			String password) throws InvalidParameterException, NotFoundException, FailedAuthenticationException {
+	public void setSignupUser(String firstName, String lastName, String email, String password, String phoneNumber,
+			String role) throws InvalidParameterException, NotFoundException, FailedAuthenticationException {
 
 		Set<String> userRole = new HashSet<>();
 		userRole.add("Member");
@@ -48,7 +49,13 @@ public class AuthenticationService {
 
 		try {
 
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String encodedPassword = passwordEncoder.encode(password);
+
+			User user = new User(firstName, lastName, email, encodedPassword, phoneNumber, role);
+
 			logger.info("setSignupUser(firstName, lastName, ...");
+
 			if (!(userRole.contains(role))) {
 				throw new InvalidParameterException("You selected an invalid role");
 			}
@@ -69,8 +76,7 @@ public class AuthenticationService {
 				throw new NotFoundException("last name cannot be blank");
 			}
 
-//			if (!(email.matches(
-//					"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"))) {
+//			if (!(email.equals("/.+@[^@]+\\.[^@]{2,}$/"))) {
 //				throw new InvalidParameterException("You entered an invalid email");
 //			}
 
@@ -93,14 +99,14 @@ public class AuthenticationService {
 				throw new InvalidParameterException("Phone number input is not valid, enter correct input");
 			}
 
-			User user = authenticationDao.getSignupUser(firstName, lastName, email, phoneNumber, role, password);
+			this.authenticationDao.getSignupUser(user);
 
-			if (user == null) {
-				throw new FailedAuthenticationException("Cannot sign up user! Try again later");
+//			if (userd == null) {
+//				throw new FailedAuthenticationException("Cannot sign up user! Try again later");
+//
+//			}
 
-			}
-
-			return user;
+//			return userd;
 
 		} catch (NumberFormatException e) {
 

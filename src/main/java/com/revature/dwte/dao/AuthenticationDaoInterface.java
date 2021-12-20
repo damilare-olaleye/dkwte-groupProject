@@ -6,8 +6,7 @@ public interface AuthenticationDaoInterface {
 
 	public User getLoginUser(String email, String password);
 
-	public User getSignupUser(String firstName, String lastName, String email, String phoneNumber, String role,
-			String password);
+	public void getSignupUser(User user);
 
 	public User getUserById(int id);
 }

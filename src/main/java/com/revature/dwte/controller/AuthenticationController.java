@@ -7,13 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dwte.dto.LoginDTO;
-import com.revature.dwte.dto.SignupDTO;
 import com.revature.dwte.exception.FailedAuthenticationException;
 import com.revature.dwte.exception.InvalidLoginException;
 import com.revature.dwte.exception.InvalidParameterException;
@@ -34,6 +35,17 @@ public class AuthenticationController {
 	private HttpServletRequest req;
 
 	private static final String CURRENTUSER = "currentuser";
+
+	@GetMapping(path = "/loginstatus")
+	public ResponseEntity<Object> loginStatus() {
+		User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
+
+		if (currentlyLoggedInUser != null) {
+			return ResponseEntity.status(200).body(currentlyLoggedInUser);
+		}
+
+		return ResponseEntity.status(401).body("Not logged in");
+	}
 
 	@PostMapping(path = "/login")
 	public ResponseEntity<Object> login(@RequestBody LoginDTO dto) {
@@ -56,21 +68,25 @@ public class AuthenticationController {
 
 	}
 
+	@PostMapping(path = "/logout")
+	public ResponseEntity<String> logout() {
+		req.getSession().invalidate(); // Invalidate the session (logging out)
+
+		return ResponseEntity.status(200).body("Successfully logged out");
+	}
+
 	@PostMapping(path = "/signup")
-	public ResponseEntity<Object> login(@RequestBody SignupDTO dto)
+	public ResponseEntity<Object> login(@RequestBody User dto)
 			throws InvalidParameterException, NotFoundException, FailedAuthenticationException {
 
 		try {
 
 			logger.info("signup user ...");
 
-			User user = this.authService.setSignupUser(dto.getFirstName(), dto.getLastName(), dto.getEmail(),
-					dto.getPhoneNumber(), dto.getUserRole(), dto.getPassword());
+			this.authService.setSignupUser(dto.getFirst_name(), dto.getLast_name(), dto.getEmail(), dto.getPassword(),
+					dto.getPhone_number(), dto.getRole());
 
-			HttpSession session = req.getSession();
-			session.setAttribute(CURRENTUSER, user);
-
-			return ResponseEntity.status(200).body(user);
+			return ResponseEntity.status(200).body("You have successfully signed up!");
 
 		} catch (FailedAuthenticationException e) {
 

@@ -14,8 +14,8 @@ import com.revature.dwte.model.User;
 
 @Aspect
 @Component
-public class SecurityAspect {
-
+public class SecurityAspect {	
+	
 	@Autowired
 	private HttpServletRequest req;
 
@@ -33,6 +33,50 @@ public class SecurityAspect {
 		if (!currentlyLoggedInUser.getRole().equals("Member")) {
 			return ResponseEntity.status(401)
 					.body("You are logged in, but only members are allowed to access this endpoint");
+		}
+
+		Object returnValue = pjp.proceed();
+
+		return returnValue;
+
+	}
+
+	@Around("@annotation(com.revature.dwte.annotation.Admin)")
+	public Object protectEndpointAdminOnly(ProceedingJoinPoint pjp) throws Throwable {
+
+		HttpSession session = req.getSession();
+
+		User currentlyLoggedInUser = (User) session.getAttribute("currentuser");
+
+		if (currentlyLoggedInUser == null) {
+			return ResponseEntity.status(401).body("You are not logged in");
+		}
+
+		if (!currentlyLoggedInUser.getRole().equals("Admin")) {
+			return ResponseEntity.status(401)
+					.body("You are logged in, but only Admins are allowed to access this endpoint");
+		}
+
+		Object returnValue = pjp.proceed();
+
+		return returnValue;
+
+	}
+
+	@Around("@annotation(com.revature.dwte.annotation.AdminAndMember)")
+	public Object protectEndpointAdminAndMemberOnly(ProceedingJoinPoint pjp) throws Throwable {
+
+		HttpSession session = req.getSession();
+
+		User currentlyLoggedInUser = (User) session.getAttribute("currentuser");
+
+		if (currentlyLoggedInUser == null) {
+			return ResponseEntity.status(401).body("You are not logged in");
+		}
+
+		if (!currentlyLoggedInUser.getRole().equals("Admin") || (!currentlyLoggedInUser.getRole().equals("Member"))) {
+			return ResponseEntity.status(401)
+					.body("You are logged in, but only Admins and Members are allowed to access this endpoint");
 		}
 
 		Object returnValue = pjp.proceed();

@@ -48,6 +48,24 @@ public class ReviewsDao implements ReviewsDaoInterface {
 
 	}
 
+	@Transactional
+	public void deleteReviews(int userIdOfCurrentlyLoggedInUser, int reviewId) {
+
+		Review r = entityManager.find(Review.class, reviewId);
+
+		entityManager.remove(r);
+	}
+
+	@Transactional
+	public int getReviewsById(int reviewId) {
+
+		int getReviewById = entityManager.createQuery("FROM Review r WHERE r.reiviewId=:reiviewId", Review.class)
+				.setParameter("reiviewId", reviewId).executeUpdate();
+
+		return getReviewById;
+
+	}
+
 //	@Transactional
 //	public List<Review> getAllReviewsByResturantId(int resturantId) {
 //

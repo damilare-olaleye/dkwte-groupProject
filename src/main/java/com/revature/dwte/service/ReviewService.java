@@ -14,7 +14,7 @@ import com.revature.dwte.model.Review;
 import com.revature.dwte.model.User;
 
 @Service
-public class ReviewService {
+public class ReviewService implements ReviewServiceInterface {
 
 	private Logger logger = LoggerFactory.getLogger(ReviewsController.class);
 
@@ -36,4 +36,10 @@ public class ReviewService {
 		return reviewDao.addNewReview(currentlyLoggedInUser.getUserId(), dto);
 
 	}
+
+	public void deleteReviews(User currentlyLoggedInUser, int reviewId) {
+
+		this.reviewDao.deleteReviews(currentlyLoggedInUser.getUserId(), reviewId);
+	}
+
 }

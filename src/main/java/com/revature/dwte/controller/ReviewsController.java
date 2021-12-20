@@ -10,11 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.dwte.annotation.Admin;
 import com.revature.dwte.annotation.Member;
 import com.revature.dwte.dto.AddReviewDTO;
 import com.revature.dwte.model.Review;
@@ -63,6 +66,18 @@ public class ReviewsController {
 		Review addedReview = reviewService.getAddNewReview(currentlyLoggedInUser, dto);
 
 		return ResponseEntity.status(201).body(addedReview);
+
+	}
+
+	@DeleteMapping(path = "/deletereviews/{reiviewId}")
+	@Admin
+	public ResponseEntity<Object> deleteReviews(@PathVariable int reiviewId) {
+
+		User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
+
+		this.reviewService.deleteReviews(currentlyLoggedInUser, reiviewId);
+
+		return ResponseEntity.status(201).body("Succesfully deleted review with id of " + reiviewId);
 
 	}
 

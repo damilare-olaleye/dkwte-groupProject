@@ -1,6 +1,9 @@
 package com.revature.dwte.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -20,8 +23,7 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 
 	@Transactional
 	public User getLoginUser(String email, String password) {
-
-		logger.info("getLoginUser(email, password");
+		logger.info("AuthenticationDao.getLoginUser() invoked");
 
 		User user = entityManager
 				.createQuery("FROM User u WHERE u.email = :userEmail AND u.password = :userPassword", User.class)
@@ -33,8 +35,7 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 
 	@Transactional
 	public void getSignupUser(User user) {
-
-		logger.info("getSignupUser(email, password, ...");
+		logger.info("AuthenticationDao.getSignupUser() invoked");
 
 		System.out.println(user);
 
@@ -44,14 +45,46 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 
 	@Transactional
 	public User getUserById(int id) {
-
-		logger.info("getUserById(id");
+		logger.info("AuthenticationDao.getUserById() invoked");
 
 		User user = entityManager.createQuery("FROM User u WHERE u.userId = :userId", User.class)
 				.setParameter("userId", id).getSingleResult();
 
 		return user;
 
+	}
+
+	@Transactional
+	public List<User> getUserByEmailAndPhoneNumber(String email, String phone_number) {
+		logger.info("AuthenticationDao.getUserByEmailAndPhoneNumber() invoked");
+
+		try {
+			List<User> users = entityManager
+					.createQuery("FROM User u WHERE u.email = :userEmail OR u.phone_number = :userPhone_number",
+							User.class)
+					.setParameter("userEmail", email).setParameter("userPhone_number", phone_number).getResultList();
+
+			return users;
+		} catch (NoResultException e) {
+
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public User getUserByEmail(String email) {
+		logger.info("AuthenticationDao.getUserByEmail() invoked");
+
+		try {
+			User user = entityManager.createQuery("FROM User u WHERE u.email = :email", User.class)
+					.setParameter("email", email).getSingleResult();
+
+			logger.info("users {}", user);
+
+			return user;
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 }

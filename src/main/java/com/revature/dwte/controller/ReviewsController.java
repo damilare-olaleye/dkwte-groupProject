@@ -37,8 +37,7 @@ public class ReviewsController {
 
 	@GetMapping(path = "/reviews")
 	public ResponseEntity<Object> getAllReviews() {
-
-		logger.info("getting all reviews ...");
+		logger.info("ReviewsController.getAllReviews() invoked");
 
 		HttpSession session = req.getSession();
 
@@ -58,6 +57,7 @@ public class ReviewsController {
 	@PostMapping(path = "/newreviews")
 	@Member
 	public ResponseEntity<Object> addNewReviews(@RequestBody AddReviewDTO dto) {
+		logger.info("ReviewsController.addNewReviews() invoked");
 
 		User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
 		Review addedReview = reviewService.getAddNewReview(currentlyLoggedInUser, dto);

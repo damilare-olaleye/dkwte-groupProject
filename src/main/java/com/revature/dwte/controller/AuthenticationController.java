@@ -1,5 +1,7 @@
 package com.revature.dwte.controller;
 
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dwte.dto.LoginDTO;
-import com.revature.dwte.exception.FailedAuthenticationException;
 import com.revature.dwte.exception.InvalidLoginException;
 import com.revature.dwte.exception.InvalidParameterException;
 import com.revature.dwte.exception.NotFoundException;
 import com.revature.dwte.model.User;
 import com.revature.dwte.service.AuthenticationService;
+import com.revature.dwte.utility.ValidateUtil;
 
 @RestController
 @CrossOrigin(originPatterns = "*", allowCredentials = "true")
@@ -34,10 +35,15 @@ public class AuthenticationController {
 	@Autowired
 	private HttpServletRequest req;
 
+	@Autowired
+	private ValidateUtil validateUtil;
+
 	private static final String CURRENTUSER = "currentuser";
 
 	@GetMapping(path = "/loginstatus")
 	public ResponseEntity<Object> loginStatus() {
+		logger.info("AuthenticationController.logiinStatus() invoked");
+
 		User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
 
 		if (currentlyLoggedInUser != null) {
@@ -48,9 +54,8 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(path = "/login")
-	public ResponseEntity<Object> login(@RequestBody LoginDTO dto) {
-
-		logger.info("login user ...");
+	public ResponseEntity<Object> login(@RequestBody LoginDTO dto) throws NoSuchAlgorithmException {
+		logger.info("AuthenticationController.login() invoked");
 
 		try {
 			User user = this.authService.setLoginUser(dto.getEmail(), dto.getPassword());
@@ -76,19 +81,20 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(path = "/signup")
-	public ResponseEntity<Object> login(@RequestBody User dto)
-			throws InvalidParameterException, NotFoundException, FailedAuthenticationException {
+	public ResponseEntity<Object> login(@RequestBody User dto) throws NoSuchAlgorithmException, NotFoundException {
+		logger.info("AuthenticationController.signUp() invoked");
 
 		try {
 
-			logger.info("signup user ...");
+			// validate all the input for sign up
+			validateUtil.verifySignUp(dto);
 
 			this.authService.setSignupUser(dto.getFirst_name(), dto.getLast_name(), dto.getEmail(), dto.getPassword(),
 					dto.getPhone_number(), dto.getRole());
 
 			return ResponseEntity.status(200).body("You have successfully signed up!");
 
-		} catch (FailedAuthenticationException e) {
+		} catch (InvalidParameterException e) {
 
 			return ResponseEntity.status(400).body(e.getMessage());
 

@@ -3,6 +3,7 @@ package com.revature.dwte.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -11,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
-import com.revature.dwte.controller.ReviewsController;
-import com.revature.dwte.dto.AddReviewDTO;
 import com.revature.dwte.model.Review;
-import com.revature.dwte.model.User;
 
 @Repository
 public class ReviewsDao implements ReviewsDaoInterface {
@@ -42,8 +40,27 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	}
 
 	@Transactional
-	public Review addNewReview(int userIdOfCurrentlyLoggedInUser, AddReviewDTO dto) {
+	public Review addNewReview(String rating, String experienceReview, String submittedDate, int restaurantId,
+			int authorId) {
 		logger.info("ReviewsDao.addNewReview() invoked");
+
+
+		Review reviewToAdd = new Review();
+
+		reviewToAdd.setRatings(rating);
+		reviewToAdd.setReview(experienceReview);
+		reviewToAdd.setSubmittedDate(submittedDate);
+		reviewToAdd.setRestaurantId(restaurantId);
+		reviewToAdd.setAuthorId(authorId);
+
+		this.entityManager.persist(reviewToAdd);
+
+		return reviewToAdd;
+	}
+
+	@Transactional
+	public void deleteReviews(int reviewId) {
+		logger.info("ReviewsDao.deleteReviews() invoked");
 
 		try {
 			User currentlyLoggedInUser = entityManager.find(User.class, userIdOfCurrentlyLoggedInUser);
@@ -63,40 +80,32 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	}
 
 	@Transactional
-	public void deleteReviews(int userIdOfCurrentlyLoggedInUser, int reviewId) {
+	public Review getReviewsByReviewId(int reviewId) {
+		logger.info("ReviewsDao.getReviewsByReviewId() invoked");
+
 		try {
-			Review r = entityManager.find(Review.class, reviewId);
+			Review review = entityManager.createQuery("FROM Review r WHERE r.reviewId = :reviewId", Review.class)
+					.setParameter("reviewId", reviewId).getSingleResult();
 
-			entityManager.remove(r);
-
-		} catch (DataAccessException e) {
-
-			e.printStackTrace();
-
+			return review;
+		} catch (NoResultException e) {
+			return null;
 		}
 
 	}
 
 	@Transactional
-	public int getReviewsById(int reviewId) {
+	public List<Review> getReviewByRestaurantId(int restaurantId) {
+		logger.info("ReviewsDao.getReviewsByReviewId() invoked");
 
-		int getReviewById = entityManager.createQuery("FROM Review r WHERE r.reiviewId=:reiviewId", Review.class)
-				.setParameter("reiviewId", reviewId).executeUpdate();
+		try {
+			List<Review> reviews = entityManager
+					.createQuery("FROM Review r WHERE r.restaurantId = :restaurantId", Review.class)
+					.setParameter("restaurantId", restaurantId).getResultList();
 
-		return getReviewById;
-
+			return reviews;
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
-
-//	@Transactional
-//	public List<Review> getAllReviewsByResturantId(int resturantId) {
-//
-//		List<Review> reviews = entityManager
-//				.createQuery("SELECT r FROM Review r JOIN r.authorId re WHERE re.resturantsId = :resturantsId",
-//						Review.class)
-//				.setParameter("resturantsId", resturantId).getResultList();
-//
-//		return reviews;
-//
-//	}
-
 }

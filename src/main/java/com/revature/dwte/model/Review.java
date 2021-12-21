@@ -1,8 +1,6 @@
 package com.revature.dwte.model;
 
-import java.sql.Timestamp;
-import java.util.Objects;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,42 +12,42 @@ public class Review {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int reiviewId;
+	@Column(name = "review_id")
+	private int reviewId;
 
+	@Column(name = "rating", nullable = false)
 	private String ratings;
+
+	@Column(name = "review")
 	private String review;
-	private Timestamp submittedDate;
+
+	@Column(name = "submit_date", updatable = false)
+	private String submittedDate;
 
 	@ManyToOne
-	private Restaurant resturantsId;
+	private Restaurant restaurant;
+
+	// creating column for restaurant ID and make it a foreign key
+	@Column(name = "restaurant_id")
+	private int restaurantId;
 
 	@ManyToOne
-	private User authorId;
+	private User author;
+
+	// creating column for author ID and make it a foreign key
+	@Column(name = "author_id")
+	private int authorId;
 
 	public Review() {
 		super();
 	}
 
-	public Review(String ratings, String review, Timestamp submittedDate, Restaurant resturantsId, User authorId) {
-		super();
-		this.ratings = ratings;
-		this.review = review;
-		this.submittedDate = submittedDate;
-		this.resturantsId = resturantsId;
-		this.authorId = authorId;
-	}
-	
-	public Review(int reviewId) {
-		super();
-		this.reiviewId = reviewId;
+	public int getReviewId() {
+		return reviewId;
 	}
 
-	public int getReiviewId() {
-		return reiviewId;
-	}
-
-	public void setReiviewId(int reiviewId) {
-		this.reiviewId = reiviewId;
+	public void setReviewId(int reviewId) {
+		this.reviewId = reviewId;
 	}
 
 	public String getRatings() {
@@ -68,33 +66,59 @@ public class Review {
 		this.review = review;
 	}
 
-	public Timestamp getSubmittedDate() {
+	public String getSubmittedDate() {
 		return submittedDate;
 	}
 
-	public void setSubmittedDate(Timestamp submittedDate) {
+	public void setSubmittedDate(String submittedDate) {
 		this.submittedDate = submittedDate;
 	}
 
-	public Restaurant getResturantsId() {
-		return resturantsId;
+	public Restaurant getRestaurant() {
+		return restaurant;
 	}
 
-	public void setResturantsId(Restaurant resturantsId) {
-		this.resturantsId = resturantsId;
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
 	}
 
-	public User getAuthorId() {
+	public int getRestaurantId() {
+		return restaurantId;
+	}
+
+	public void setRestaurantId(int restaurantId) {
+		this.restaurantId = restaurantId;
+	}
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(User author) {
+		this.author = author;
+	}
+
+	public int getAuthorId() {
 		return authorId;
 	}
 
-	public void setAuthorId(User authorId) {
+	public void setAuthorId(int authorId) {
 		this.authorId = authorId;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(authorId, ratings, reiviewId, resturantsId, review, submittedDate);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((author == null) ? 0 : author.hashCode());
+		result = prime * result + authorId;
+		result = prime * result + ((ratings == null) ? 0 : ratings.hashCode());
+		result = prime * result + ((restaurant == null) ? 0 : restaurant.hashCode());
+		result = prime * result + restaurantId;
+		result = prime * result + ((review == null) ? 0 : review.hashCode());
+		result = prime * result + reviewId;
+		result = prime * result + ((submittedDate == null) ? 0 : submittedDate.hashCode());
+		return result;
 	}
 
 	@Override
@@ -106,15 +130,45 @@ public class Review {
 		if (getClass() != obj.getClass())
 			return false;
 		Review other = (Review) obj;
-		return Objects.equals(authorId, other.authorId) && Objects.equals(ratings, other.ratings)
-				&& reiviewId == other.reiviewId && Objects.equals(resturantsId, other.resturantsId)
-				&& Objects.equals(review, other.review) && Objects.equals(submittedDate, other.submittedDate);
+		if (author == null) {
+			if (other.author != null)
+				return false;
+		} else if (!author.equals(other.author))
+			return false;
+		if (authorId != other.authorId)
+			return false;
+		if (ratings == null) {
+			if (other.ratings != null)
+				return false;
+		} else if (!ratings.equals(other.ratings))
+			return false;
+		if (restaurant == null) {
+			if (other.restaurant != null)
+				return false;
+		} else if (!restaurant.equals(other.restaurant))
+			return false;
+		if (restaurantId != other.restaurantId)
+			return false;
+		if (review == null) {
+			if (other.review != null)
+				return false;
+		} else if (!review.equals(other.review))
+			return false;
+		if (reviewId != other.reviewId)
+			return false;
+		if (submittedDate == null) {
+			if (other.submittedDate != null)
+				return false;
+		} else if (!submittedDate.equals(other.submittedDate))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Review [reiviewId=" + reiviewId + ", ratings=" + ratings + ", review=" + review + ", submittedDate="
-				+ submittedDate + ", resturantsId=" + resturantsId + ", authorId=" + authorId + "]";
+		return "Review [reviewId=" + reviewId + ", ratings=" + ratings + ", review=" + review + ", submittedDate="
+				+ submittedDate + ", restaurant=" + restaurant + ", restaurantId=" + restaurantId + ", author=" + author
+				+ ", authorId=" + authorId + "]";
 	}
 
 }

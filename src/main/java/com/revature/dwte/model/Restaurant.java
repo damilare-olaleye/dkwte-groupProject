@@ -1,50 +1,61 @@
 package com.revature.dwte.model;
 
-import java.util.Objects;
-
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 @Entity
 public class Restaurant {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int resturantId;
+	// embeddedId for composite key
+	@EmbeddedId
+	private RestaurantCompositeKey restaurantCompositeKey;
 
-	private String resturantName;
+	@Generated(GenerationTime.INSERT)
+	@Column(columnDefinition = "serial", insertable = false)
+	private int restaurantId;
 
 	public Restaurant() {
 		super();
 	}
 
-	public Restaurant(int resturantId, String resturantName) {
+	public Restaurant(int restaurantId) {
 		super();
-		this.resturantId = resturantId;
-		this.resturantName = resturantName;
+		this.restaurantId = restaurantId;
 	}
 
-	public int getResturantId() {
-		return resturantId;
+	public Restaurant(RestaurantCompositeKey restaurantCompositeKey, int restaurantId) {
+		super();
+		this.restaurantCompositeKey = restaurantCompositeKey;
+		this.restaurantId = restaurantId;
 	}
 
-	public void setResturantId(int resturantId) {
-		this.resturantId = resturantId;
+	public RestaurantCompositeKey getRestaurantCompositeKey() {
+		return restaurantCompositeKey;
 	}
 
-	public String getResturantName() {
-		return resturantName;
+	public void setRestaurantCompositeKey(RestaurantCompositeKey restaurantCompositeKey) {
+		this.restaurantCompositeKey = restaurantCompositeKey;
 	}
 
-	public void setResturantName(String resturantName) {
-		this.resturantName = resturantName;
+	public int getRestaurantId() {
+		return restaurantId;
+	}
+
+	public void setRestaurantId(int restaurantId) {
+		this.restaurantId = restaurantId;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(resturantId, resturantName);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((restaurantCompositeKey == null) ? 0 : restaurantCompositeKey.hashCode());
+		result = prime * result + restaurantId;
+		return result;
 	}
 
 	@Override
@@ -56,12 +67,19 @@ public class Restaurant {
 		if (getClass() != obj.getClass())
 			return false;
 		Restaurant other = (Restaurant) obj;
-		return resturantId == other.resturantId && Objects.equals(resturantName, other.resturantName);
+		if (restaurantCompositeKey == null) {
+			if (other.restaurantCompositeKey != null)
+				return false;
+		} else if (!restaurantCompositeKey.equals(other.restaurantCompositeKey))
+			return false;
+		if (restaurantId != other.restaurantId)
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Restaurant [resturantId=" + resturantId + ", resturantName=" + resturantName + "]";
+		return "Restaurant [restaurantCompositeKey=" + restaurantCompositeKey + ", restaurantId=" + restaurantId + "]";
 	}
 
 }

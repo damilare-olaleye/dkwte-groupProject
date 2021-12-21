@@ -2,6 +2,7 @@ package com.revature.dwte.utility;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,8 +12,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.dwte.exception.InvalidParameterException;
+import com.revature.dwte.model.Restaurant;
+import com.revature.dwte.model.Review;
 import com.revature.dwte.model.User;
 import com.revature.dwte.service.AuthenticationService;
+import com.revature.dwte.service.RestaurantService;
+import com.revature.dwte.service.ReviewService;
 
 public class ValidateUtil {
 
@@ -21,7 +26,14 @@ public class ValidateUtil {
 	@Autowired
 	AuthenticationService authenticationService;
 
+	@Autowired
+	RestaurantService restaurantService;
+
+	@Autowired
+	ReviewService reviewService;
+
 	static List<String> userRoleList = Arrays.asList("member", "admin");
+	static List<String> ratingList = Arrays.asList("1", "2", "3", "4", "5");
 
 	public void verifySignUp(User user) throws InvalidParameterException {
 		logger.info("ValidteUtil.verifySignUp() invoked");
@@ -188,12 +200,12 @@ public class ValidateUtil {
 				validateNameString.append("Last name");
 				validateNamesBoolean = true;
 			}
-		}		if (validateNamesBoolean) {
+		}
+		if (validateNamesBoolean) {
 			validateNameString.append(" invalid. Names cannot contain any symbols or numbers.");
 			// .toString turn StringBuilder into a string
 			throw new InvalidParameterException(validateNameString.toString());
 		}
-
 
 		/*-
 		 *  validate password
@@ -205,6 +217,130 @@ public class ValidateUtil {
 			throw new InvalidParameterException(
 					"Password must contain at least one number and one uppercase and lowercase letter, "
 							+ "and between 8 to 20 characters.");
+		}
+
+	}
+
+	public void verifyAddRestaurant(String restaurantName, String restaurantAddress) throws InvalidParameterException {
+		logger.info("ValidteUtil.verifyAddRestaurant() invoked");
+
+		/*-
+		 *  Check if inputs are blank
+		 */
+		logger.info("check if inputs are blank");
+
+		boolean blankInputBoolean = false;
+		StringBuilder blankInputString = new StringBuilder();
+
+		if (StringUtils.isBlank(restaurantName)) {
+			blankInputString.append("Restaurant name");
+			blankInputBoolean = true;
+		}
+		if (StringUtils.isBlank(restaurantAddress)) {
+			if (blankInputBoolean) {
+				blankInputString.append(", restaurant address");
+				blankInputBoolean = true;
+			} else {
+				blankInputString.append("Restaurant address");
+				blankInputBoolean = true;
+			}
+		}
+		if (blankInputBoolean) {
+			blankInputString.append(" cannot be blank.");
+			// .toString turn StringBuilder into a string
+			throw new InvalidParameterException(blankInputString.toString());
+		}
+
+		/*-
+		 *  Check if restaurant already exist
+		 */
+		logger.info("Check if restaurant already exist");
+
+		Restaurant databaseRestaurant = restaurantService.getRestaurantByRestaurantNameAndAddress(restaurantName,
+				restaurantAddress);
+
+		if (databaseRestaurant != null) {
+			throw new InvalidParameterException(
+					restaurantName + " with address of " + restaurantAddress + " already exist.");
+		}
+
+	}
+
+	public void verifyNewReview(String rating, String review, String restaurantId) throws InvalidParameterException {
+		logger.info("ValidteUtil.verifyNewReview() invoked");
+
+		/*-
+		 *  Check if inputs are blank
+		 */
+		logger.info("check if rating and restaurant id are blank");
+
+		boolean blankInputBoolean = false;
+		StringBuilder blankInputString = new StringBuilder();
+
+		if (StringUtils.isBlank(rating)) {
+			blankInputString.append("Rating");
+			blankInputBoolean = true;
+		}
+		if (StringUtils.isBlank(restaurantId)) {
+			if (blankInputBoolean) {
+				blankInputString.append(", restaurant ID ");
+				blankInputBoolean = true;
+			} else {
+				blankInputString.append("Restaurant ID");
+				blankInputBoolean = true;
+			}
+		}
+		if (blankInputBoolean) {
+			blankInputString.append(" cannot be blank.");
+			// .toString turn StringBuilder into a string
+			throw new InvalidParameterException(blankInputString.toString());
+		}
+
+		Integer restaurantIdInput = Integer.parseInt(restaurantId);
+
+		logger.info("restaurantId {}", restaurantIdInput);
+
+		/*-
+		 *  check if restaurant exist
+		 */
+		logger.info("check if restaurant exist");
+
+		Restaurant databaseRestaurant = restaurantService.getRestaurantByRestaurantId(restaurantIdInput);
+
+		if (databaseRestaurant == null) {
+			throw new InvalidParameterException("Restaurant with the ID of " + restaurantIdInput + " does not exist.");
+		}
+
+		/*-
+		 *  verify rating
+		 */
+		logger.info("verify rating");
+
+		if (!ratingList.contains(rating)) {
+			throw new InvalidParameterException(
+					"Invalid rating. Please enter a number between 1-5 to represent the number of start(s).");
+		}
+
+	}
+
+	public void verifyRevieId(int reviewId) throws InvalidParameterException {
+		logger.info("ValidteUtil.verifyRevieId() invoked");
+
+		Review databaseReview = reviewService.getReviewByReviewId(reviewId);
+
+		if (databaseReview == null) {
+			throw new InvalidParameterException("Review with the ID of " + reviewId + " does not exist.");
+		}
+
+	}
+
+	public void verifyRestaurantId(int restaurantId) throws InvalidParameterException {
+		logger.info("ValidteUtil.verifyRestaurantId() invoked");
+
+		Restaurant databaseRestaurant = restaurantService.getRestaurantByRestaurantId(restaurantId);
+
+		if (databaseRestaurant == null) {
+			throw new InvalidParameterException("Restaurant with the ID of " + restaurantId + " does not exist.");
 		}
 
 	}

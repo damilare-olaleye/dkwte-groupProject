@@ -24,7 +24,7 @@ public class AuthenticationService {
 
 	private Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
-	public User setLoginUser(String email, String password) throws InvalidLoginException, NoSuchAlgorithmException {
+	public User logInUser(String email, String password) throws InvalidLoginException, NoSuchAlgorithmException {
 		logger.info("AuthenticationService.setLoginUser() invoked");
 
 		User user = this.authenticationDao.getUserByEmail(email);
@@ -35,8 +35,8 @@ public class AuthenticationService {
 				String algorithm = "SHA-256";
 				String hashedInputPassword = HashUtil.hashInputPassword(password.trim(), algorithm);
 
-				logger.info("hashedInputPassword {}", hashedInputPassword);
-				logger.info("user.getPassword {}", user.getPassword());
+				logger.debug("hashedInputPassword {}", hashedInputPassword);
+				logger.debug("user.getPassword {}", user.getPassword());
 
 				Boolean isCorrectPassword = hashedInputPassword.equals(user.getPassword());
 
@@ -54,7 +54,7 @@ public class AuthenticationService {
 		}
 	}
 
-	public void setSignupUser(String firstName, String lastName, String email, String password, String phoneNumber,
+	public void signUpUser(String firstName, String lastName, String email, String password, String phoneNumber,
 			String role) throws InvalidParameterException, NotFoundException, NoSuchAlgorithmException {
 		logger.info("AuthenticationService.setSignupUser() invoked");
 
@@ -73,7 +73,7 @@ public class AuthenticationService {
 
 		User user = new User(firstNameCap, lastNameCap, email.trim(), hashedPassword, phoneNumber.trim(), userRole);
 
-		this.authenticationDao.getSignupUser(user);
+		this.authenticationDao.signUpUser(user);
 
 	}
 

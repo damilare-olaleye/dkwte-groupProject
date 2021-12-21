@@ -2,6 +2,11 @@ package com.revature.dwte.exception;
 
 public class FailedAuthenticationException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public FailedAuthenticationException() {
 		super();
 	}

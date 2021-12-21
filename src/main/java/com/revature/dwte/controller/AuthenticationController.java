@@ -47,10 +47,12 @@ public class AuthenticationController {
 		User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
 
 		if (currentlyLoggedInUser != null) {
-			return ResponseEntity.status(200).body(currentlyLoggedInUser);
+			return ResponseEntity.status(200)
+					.body("You are currently log in as " + currentlyLoggedInUser.getFirst_name() + " "
+							+ currentlyLoggedInUser.getLast_name() + ", " + currentlyLoggedInUser.getRole() + ".");
 		}
 
-		return ResponseEntity.status(401).body("Not logged in");
+		return ResponseEntity.status(401).body("You are currently not logged in.");
 	}
 
 	@PostMapping(path = "/login")
@@ -58,12 +60,12 @@ public class AuthenticationController {
 		logger.info("AuthenticationController.login() invoked");
 
 		try {
-			User user = this.authService.setLoginUser(dto.getEmail(), dto.getPassword());
+			User user = this.authService.logInUser(dto.getEmail(), dto.getPassword());
 
 			HttpSession session = req.getSession();
 			session.setAttribute(CURRENTUSER, user);
 
-			return ResponseEntity.status(200).body(user);
+			return ResponseEntity.status(200).body("Successfully logged in.");
 
 		} catch (InvalidLoginException e) {
 
@@ -77,7 +79,7 @@ public class AuthenticationController {
 	public ResponseEntity<String> logout() {
 		req.getSession().invalidate(); // Invalidate the session (logging out)
 
-		return ResponseEntity.status(200).body("Successfully logged out");
+		return ResponseEntity.status(200).body("Successfully logged out.");
 	}
 
 	@PostMapping(path = "/signup")
@@ -89,10 +91,10 @@ public class AuthenticationController {
 			// validate all the input for sign up
 			validateUtil.verifySignUp(dto);
 
-			this.authService.setSignupUser(dto.getFirst_name(), dto.getLast_name(), dto.getEmail(), dto.getPassword(),
+			this.authService.signUpUser(dto.getFirst_name(), dto.getLast_name(), dto.getEmail(), dto.getPassword(),
 					dto.getPhone_number(), dto.getRole());
 
-			return ResponseEntity.status(200).body("You have successfully signed up!");
+			return ResponseEntity.status(200).body("Successfully signed up.");
 
 		} catch (InvalidParameterException e) {
 

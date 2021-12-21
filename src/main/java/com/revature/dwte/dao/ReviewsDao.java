@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.revature.dwte.model.Review;
@@ -25,9 +26,16 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	public List<Review> getAllReviews() {
 		logger.info("ReviewsDao.getAllReviews() invoked");
 
-		List<Review> reviews = entityManager.createQuery("FROM Review r", Review.class).getResultList();
+		try {
+			List<Review> reviews = entityManager.createQuery("FROM Review r", Review.class).getResultList();
 
-		return reviews;
+			return reviews;
+
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -35,6 +43,7 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	public Review addNewReview(String rating, String experienceReview, String submittedDate, int restaurantId,
 			int authorId) {
 		logger.info("ReviewsDao.addNewReview() invoked");
+
 
 		Review reviewToAdd = new Review();
 
@@ -53,9 +62,21 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	public void deleteReviews(int reviewId) {
 		logger.info("ReviewsDao.deleteReviews() invoked");
 
-		Review r = entityManager.find(Review.class, reviewId);
+		try {
+			User currentlyLoggedInUser = entityManager.find(User.class, userIdOfCurrentlyLoggedInUser);
 
-		entityManager.remove(r);
+			Review reviewToAdd = new Review(dto.getRatings(), dto.getReview(), dto.getSubmittedDate(),
+					dto.getResturantsId(), currentlyLoggedInUser);
+
+			entityManager.persist(reviewToAdd);
+
+			return reviewToAdd;
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 	@Transactional
@@ -87,17 +108,4 @@ public class ReviewsDao implements ReviewsDaoInterface {
 			return null;
 		}
 	}
-
-//	@Transactional
-//	public List<Review> getAllReviewsByResturantId(int resturantId) {
-//
-//		List<Review> reviews = entityManager
-//				.createQuery("SELECT r FROM Review r JOIN r.authorId re WHERE re.resturantsId = :resturantsId",
-//						Review.class)
-//				.setParameter("resturantsId", resturantId).getResultList();
-//
-//		return reviews;
-//
-//	}
-
 }

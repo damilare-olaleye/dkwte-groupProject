@@ -3,12 +3,12 @@ package com.revature.dwte.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.revature.dwte.model.User;
@@ -25,11 +25,17 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 	public User getLoginUser(String email, String password) {
 		logger.info("AuthenticationDao.getLoginUser() invoked");
 
-		User user = entityManager
-				.createQuery("FROM User u WHERE u.email = :userEmail AND u.password = :userPassword", User.class)
-				.setParameter("userEmail", email).setParameter("userPassword", password).getSingleResult();
+		try {
+			User user = entityManager
+					.createQuery("FROM User u WHERE u.email = :userEmail AND u.password = :userPassword", User.class)
+					.setParameter("userEmail", email).setParameter("userPassword", password).getSingleResult();
 
-		return user;
+			return user;
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -37,9 +43,13 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 	public void getSignupUser(User user) {
 		logger.info("AuthenticationDao.getSignupUser() invoked");
 
-		System.out.println(user);
+		try {
+			this.entityManager.persist(user);
 
-		this.entityManager.persist(user);
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+		}
 
 	}
 
@@ -65,13 +75,14 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 					.setParameter("userEmail", email).setParameter("userPhone_number", phone_number).getResultList();
 
 			return users;
-		} catch (NoResultException e) {
+		} catch (DataAccessException e) {
 
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+	@Transactional
 	public User getUserByEmail(String email) {
 		logger.info("AuthenticationDao.getUserByEmail() invoked");
 
@@ -82,7 +93,7 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 			logger.info("users {}", user);
 
 			return user;
-		} catch (NoResultException e) {
+		} catch (DataAccessException e) {
 			return null;
 		}
 	}

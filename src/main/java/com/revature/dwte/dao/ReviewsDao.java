@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.revature.dwte.controller.ReviewsController;
@@ -27,9 +28,16 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	public List<Review> getAllReviews() {
 		logger.info("ReviewsDao.getAllReviews() invoked");
 
-		List<Review> reviews = entityManager.createQuery("FROM Review r", Review.class).getResultList();
+		try {
+			List<Review> reviews = entityManager.createQuery("FROM Review r", Review.class).getResultList();
 
-		return reviews;
+			return reviews;
+
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -37,23 +45,36 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	public Review addNewReview(int userIdOfCurrentlyLoggedInUser, AddReviewDTO dto) {
 		logger.info("ReviewsDao.addNewReview() invoked");
 
-		User currentlyLoggedInUser = entityManager.find(User.class, userIdOfCurrentlyLoggedInUser);
+		try {
+			User currentlyLoggedInUser = entityManager.find(User.class, userIdOfCurrentlyLoggedInUser);
 
-		Review reviewToAdd = new Review(dto.getRatings(), dto.getReview(), dto.getSubmittedDate(),
-				dto.getResturantsId(), currentlyLoggedInUser);
+			Review reviewToAdd = new Review(dto.getRatings(), dto.getReview(), dto.getSubmittedDate(),
+					dto.getResturantsId(), currentlyLoggedInUser);
 
-		entityManager.persist(reviewToAdd);
+			entityManager.persist(reviewToAdd);
 
-		return reviewToAdd;
+			return reviewToAdd;
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
 	@Transactional
 	public void deleteReviews(int userIdOfCurrentlyLoggedInUser, int reviewId) {
+		try {
+			Review r = entityManager.find(Review.class, reviewId);
 
-		Review r = entityManager.find(Review.class, reviewId);
+			entityManager.remove(r);
 
-		entityManager.remove(r);
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+
+		}
+
 	}
 
 	@Transactional

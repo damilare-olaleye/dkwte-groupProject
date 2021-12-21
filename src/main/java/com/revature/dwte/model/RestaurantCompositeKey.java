@@ -6,19 +6,24 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class RestaurantId implements Serializable {
+public class RestaurantCompositeKey implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Column(name = "restaurant_name", nullable = false)
 	private String restaurantName;
 
-	@Column(name = "address", nullable = false)
+	@Column(name = "restaurant_address", nullable = false)
 	private String restaurantAddress;
 
-	public RestaurantId() {
+	public RestaurantCompositeKey() {
 		super();
 	}
 
-	public RestaurantId(String restaurantName, String restaurantAddress) {
+	public RestaurantCompositeKey(String restaurantName, String restaurantAddress) {
 		super();
 		this.restaurantName = restaurantName;
 		this.restaurantAddress = restaurantAddress;
@@ -57,7 +62,7 @@ public class RestaurantId implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RestaurantId other = (RestaurantId) obj;
+		RestaurantCompositeKey other = (RestaurantCompositeKey) obj;
 		if (restaurantAddress == null) {
 			if (other.restaurantAddress != null)
 				return false;
@@ -73,7 +78,8 @@ public class RestaurantId implements Serializable {
 
 	@Override
 	public String toString() {
-		return "RestaurantId [restaurantName=" + restaurantName + ", restaurantAddress=" + restaurantAddress + "]";
+		return "RestaurantCompositeKey [restaurantName=" + restaurantName + ", restaurantAddress=" + restaurantAddress
+				+ "]";
 	}
 
 }

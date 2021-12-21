@@ -34,10 +34,10 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 	}
 
 	@Transactional
-	public void getSignupUser(User user) {
+	public void signUpUser(User user) {
 		logger.info("AuthenticationDao.getSignupUser() invoked");
 
-		System.out.println(user);
+//		System.out.println(user);
 
 		this.entityManager.persist(user);
 
@@ -67,7 +67,7 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 			return users;
 		} catch (NoResultException e) {
 
-			e.printStackTrace();
+//			e.printStackTrace();
 			return null;
 		}
 	}
@@ -79,7 +79,7 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 			User user = entityManager.createQuery("FROM User u WHERE u.email = :email", User.class)
 					.setParameter("email", email).getSingleResult();
 
-			logger.info("users {}", user);
+			logger.debug("users {}", user);
 
 			return user;
 		} catch (NoResultException e) {

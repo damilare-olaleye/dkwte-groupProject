@@ -1,6 +1,7 @@
 package com.revature.dwte.dao;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -9,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.revature.dwte.model.Restaurant;
+import com.revature.dwte.model.RestaurantCompositeKey;
+import com.revature.dwte.model.User;
 
 @Repository
-public class RestaurantDao {
+public class RestaurantDao implements RestaurantDaoInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(RestaurantDao.class);
 
@@ -19,17 +22,52 @@ public class RestaurantDao {
 	private EntityManager entityManager;
 
 	@Transactional
-	public Restaurant addRestaurant(Restaurant restaurant) {
+	public Restaurant addRestaurant(String restaurantName, String restaurantAddress) {
 		logger.info("RestaurantDao.addRestaurant() invoked");
 
-		Restaurant addNewRestaurant = new Restaurant();
+		RestaurantCompositeKey restaurantToAdd = new RestaurantCompositeKey(restaurantName, restaurantAddress);
+		Restaurant restaurant = new Restaurant();
+		restaurant.setRestaurantCompositeKey(restaurantToAdd);
 
-		addNewRestaurant.setRestaurantName(restaurant.getRestaurantName());
-		addNewRestaurant.setRestaurantAddress(restaurant.getRestaurantAddress());
+		entityManager.persist(restaurant);
 
-		entityManager.persist(addNewRestaurant);
+		return restaurant;
+	}
 
-		return addNewRestaurant;
+	@Transactional
+	public Restaurant getRestaurantByRestaurantId(Integer restaurantId) {
+		logger.info("RestaurantDao.getRestaurantByRestaurantId() invoked");
+
+		try {
+
+			Restaurant restaurant = (Restaurant) entityManager
+					.createQuery("FROM Restaurant r WHERE r.restaurantId = :restaurantId", Restaurant.class)
+					.setParameter("restaurantId", restaurantId).getSingleResult();
+
+			return restaurant;
+
+		} catch (NoResultException e) {
+			return null;
+		}
+
+	}
+
+	@Transactional
+	public Restaurant getRestaurantByRestaurantNameAndAddress(String restaurantName, String restaurantAddress) {
+		logger.info("RestaurantDao.getRestaurantByRestaurantNameAndAddress() invoked");
+
+		try {
+
+			Restaurant restaurant = (Restaurant) entityManager.createQuery(
+					"FROM Restaurant r WHERE r.restaurantCompositeKey.restaurantName = :restaurantName AND r.restaurantCompositeKey.restaurantAddress = :restaurantAddress",
+					Restaurant.class).setParameter("restaurantName", restaurantName)
+					.setParameter("restaurantAddress", restaurantAddress).getSingleResult();
+
+			return restaurant;
+		} catch (NoResultException e) {
+			return null;
+		}
+
 	}
 
 }

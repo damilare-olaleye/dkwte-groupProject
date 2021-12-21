@@ -63,7 +63,7 @@ public class AuthenticationControllerTest {
 
 		// ARRANGE
 
-		LoginDTO dto = new LoginDTO("mkloldoski@yahoo.com", "disIsMyPassword13");
+		LoginDTO dto = new LoginDTO("yyJane@yahoo.com", "disIsMyPassword13");
 		String jsonToSend = mapper.writeValueAsString(dto);
 
 		// ACT AND ASSERT

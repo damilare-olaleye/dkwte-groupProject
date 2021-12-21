@@ -3,6 +3,7 @@ package com.revature.dwte.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -93,7 +94,7 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 			logger.info("users {}", user);
 
 			return user;
-		} catch (DataAccessException e) {
+		} catch (NoResultException e) {
 			return null;
 		}
 	}

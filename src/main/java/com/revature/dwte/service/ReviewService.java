@@ -18,6 +18,8 @@ public class ReviewService implements ReviewServiceInterface {
 
 	private Logger logger = LoggerFactory.getLogger(ReviewsController.class);
 
+	private Logger logger = LoggerFactory.getLogger(ReviewsController.class);
+
 	@Autowired
 	private ReviewsDao reviewDao;
 

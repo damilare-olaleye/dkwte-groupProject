@@ -14,13 +14,22 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
+
+	@Column(name = "first_name", nullable = false)
 	private String first_name;
+
+	@Column(name = "last_name", nullable = false)
 	private String last_name;
+
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
+
+	@Column(name = "password", nullable = false)
 	private String password;
 	@Column(name = "phone_number", nullable = false, unique = true)
 	private String phone_number;
+
+	@Column(name = "role", nullable = false)
 	private String role;
 
 	public User() {
@@ -119,5 +128,4 @@ public class User {
 				+ ", password=" + password + ", phone_number=" + phone_number + ", role=" + role + "]";
 	}
 
-	
 }

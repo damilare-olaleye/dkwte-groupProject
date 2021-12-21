@@ -63,6 +63,12 @@ public class ReviewsController {
 		logger.info("ReviewsController.addNewReviews() invoked");
 
 		User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
+
+		if (currentlyLoggedInUser == null) {
+			return ResponseEntity.status(401).body("You are not logged in, please log in to continue");
+
+		}
+
 		Review addedReview = reviewService.getAddNewReview(currentlyLoggedInUser, dto);
 
 		return ResponseEntity.status(201).body(addedReview);

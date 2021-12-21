@@ -1,7 +1,6 @@
 package com.revature.dwte.model;
 
-import java.util.Objects;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,16 +13,20 @@ public class Restaurant {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int resturantId;
 
+	@Column(name = "restaurant_name", nullable = false)
 	private String resturantName;
+
+	@Column(name = "address", nullable = false)
+	private String address;
 
 	public Restaurant() {
 		super();
 	}
 
-	public Restaurant(int resturantId, String resturantName) {
+	public Restaurant(String resturantName, String address) {
 		super();
-		this.resturantId = resturantId;
 		this.resturantName = resturantName;
+		this.address = address;
 	}
 
 	public int getResturantId() {
@@ -42,9 +45,22 @@ public class Restaurant {
 		this.resturantName = resturantName;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(resturantId, resturantName);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + resturantId;
+		result = prime * result + ((resturantName == null) ? 0 : resturantName.hashCode());
+		return result;
 	}
 
 	@Override
@@ -56,12 +72,25 @@ public class Restaurant {
 		if (getClass() != obj.getClass())
 			return false;
 		Restaurant other = (Restaurant) obj;
-		return resturantId == other.resturantId && Objects.equals(resturantName, other.resturantName);
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
+		if (resturantId != other.resturantId)
+			return false;
+		if (resturantName == null) {
+			if (other.resturantName != null)
+				return false;
+		} else if (!resturantName.equals(other.resturantName))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Restaurant [resturantId=" + resturantId + ", resturantName=" + resturantName + "]";
+		return "Restaurant [resturantId=" + resturantId + ", resturantName=" + resturantName + ", address=" + address
+				+ "]";
 	}
 
 }

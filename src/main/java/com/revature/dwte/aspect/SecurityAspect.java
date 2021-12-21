@@ -14,8 +14,8 @@ import com.revature.dwte.model.User;
 
 @Aspect
 @Component
-public class SecurityAspect {	
-	
+public class SecurityAspect {
+
 	@Autowired
 	private HttpServletRequest req;
 
@@ -27,7 +27,7 @@ public class SecurityAspect {
 		User currentlyLoggedInUser = (User) session.getAttribute("currentuser");
 
 		if (currentlyLoggedInUser == null) {
-			return ResponseEntity.status(401).body("You are not logged in");
+			return ResponseEntity.status(401).body("You are not logged in. Must log in to access.");
 		}
 
 		if (!currentlyLoggedInUser.getRole().equals("Member")) {
@@ -49,7 +49,7 @@ public class SecurityAspect {
 		User currentlyLoggedInUser = (User) session.getAttribute("currentuser");
 
 		if (currentlyLoggedInUser == null) {
-			return ResponseEntity.status(401).body("You are not logged in");
+			return ResponseEntity.status(401).body("You are not logged in. Must log in to access.");
 		}
 
 		if (!currentlyLoggedInUser.getRole().equals("Admin")) {
@@ -71,10 +71,10 @@ public class SecurityAspect {
 		User currentlyLoggedInUser = (User) session.getAttribute("currentuser");
 
 		if (currentlyLoggedInUser == null) {
-			return ResponseEntity.status(401).body("You are not logged in");
+			return ResponseEntity.status(401).body("You are not logged in. Must log in to access.");
 		}
 
-		if (!currentlyLoggedInUser.getRole().equals("Admin") || (!currentlyLoggedInUser.getRole().equals("Member"))) {
+		if (!currentlyLoggedInUser.getRole().equals("Admin") && (!currentlyLoggedInUser.getRole().equals("Member"))) {
 			return ResponseEntity.status(401)
 					.body("You are logged in, but only Admins and Members are allowed to access this endpoint");
 		}

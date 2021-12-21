@@ -44,11 +44,6 @@ public class Review {
 		this.resturantsId = resturantsId;
 		this.authorId = authorId;
 	}
-	
-	public Review(int reviewId) {
-		super();
-		this.reiviewId = reviewId;
-	}
 
 	public int getReviewId() {
 		return reviewId;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dwte.annotation.Admin;
-import com.revature.dwte.annotation.Member;
+import com.revature.dwte.annotation.AdminAndMember;
 import com.revature.dwte.dto.AddReviewDTO;
 import com.revature.dwte.model.Review;
 import com.revature.dwte.model.User;
@@ -58,7 +58,7 @@ public class ReviewsController {
 	}
 
 	@PostMapping(path = "/newreviews")
-	@Member
+	@AdminAndMember
 	public ResponseEntity<Object> addNewReviews(@RequestBody AddReviewDTO dto) {
 		logger.info("ReviewsController.addNewReviews() invoked");
 
@@ -78,6 +78,7 @@ public class ReviewsController {
 	@DeleteMapping(path = "/deletereviews/{reiviewId}")
 	@Admin
 	public ResponseEntity<Object> deleteReviews(@PathVariable int reiviewId) {
+		logger.info("ReviewsController.deleteReviews() invoked");
 
 		User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
 

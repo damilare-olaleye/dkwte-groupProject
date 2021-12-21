@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.dwte.exception.InvalidParameterException;
+import com.revature.dwte.model.Restaurant;
 import com.revature.dwte.model.User;
 import com.revature.dwte.service.AuthenticationService;
 
@@ -188,12 +189,12 @@ public class ValidateUtil {
 				validateNameString.append("Last name");
 				validateNamesBoolean = true;
 			}
-		}		if (validateNamesBoolean) {
+		}
+		if (validateNamesBoolean) {
 			validateNameString.append(" invalid. Names cannot contain any symbols or numbers.");
 			// .toString turn StringBuilder into a string
 			throw new InvalidParameterException(validateNameString.toString());
 		}
-
 
 		/*-
 		 *  validate password
@@ -207,6 +208,37 @@ public class ValidateUtil {
 							+ "and between 8 to 20 characters.");
 		}
 
+	}
+
+	public void verifyAddRestaurant(Restaurant restaurant) throws InvalidParameterException {
+		logger.info("ValidteUtil.verifyAddRestaurant() invoked");
+
+		/*-
+		 *  Check if inputs are blank
+		 */
+		logger.info("check if inputs are blank");
+
+		boolean blankInputBoolean = false;
+		StringBuilder blankInputString = new StringBuilder();
+
+		if (StringUtils.isBlank(restaurant.getRestaurantName().trim())) {
+			blankInputString.append("Restaurant name");
+			blankInputBoolean = true;
+		}
+		if (StringUtils.isBlank(restaurant.getRestaurantAddress())) {
+			if (blankInputBoolean) {
+				blankInputString.append(", restaurant address");
+				blankInputBoolean = true;
+			} else {
+				blankInputString.append("Restaurant address");
+				blankInputBoolean = true;
+			}
+		}
+		if (blankInputBoolean) {
+			blankInputString.append(" cannot be blank.");
+			// .toString turn StringBuilder into a string
+			throw new InvalidParameterException(blankInputString.toString());
+		}
 	}
 
 }

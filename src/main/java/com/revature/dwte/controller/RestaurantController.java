@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.dwte.annotation.AdminAndMember;
 import com.revature.dwte.exception.InvalidParameterException;
 import com.revature.dwte.model.Restaurant;
 import com.revature.dwte.model.User;
 import com.revature.dwte.service.RestaurantService;
+import com.revature.dwte.utility.ValidateUtil;
 
 @RestController
 @CrossOrigin(originPatterns = "*", allowCredentials = "true")
@@ -34,6 +36,7 @@ public class RestaurantController {
 	private static final String CURRENTUSER = "currentuser";
 
 	@PostMapping(path = "/restaurant")
+	@AdminAndMember
 	public ResponseEntity<Object> addRestaurant(@RequestBody Restaurant restaurant) throws InvalidParameterException {
 		logger.info("RestaurantController.addRestaurant() invoked");
 
@@ -45,9 +48,9 @@ public class RestaurantController {
 				return ResponseEntity.status(401).body("You are not logged in, please log in to continue");
 			}
 
-			validateUtil.addRestaurant(restaurant);
+			validateUtil.verifyAddRestaurant(restaurant);
 
-			Restaurant addedRestaurant = restaurantService.addRestaurant(currentlyLoggedInUser, restaurant);
+			Restaurant addedRestaurant = restaurantService.addRestaurant(restaurant);
 
 			return ResponseEntity.status(201).body(addedRestaurant);
 

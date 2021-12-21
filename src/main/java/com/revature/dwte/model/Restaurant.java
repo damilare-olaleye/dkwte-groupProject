@@ -1,65 +1,40 @@
 package com.revature.dwte.model;
 
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
 public class Restaurant {
 
-	@Id
+	// embeddedId is an alternative to the Id but for composit key
+	@EmbeddedId
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int resturantId;
-
-	@Column(name = "restaurant_name", nullable = false)
-	private String resturantName;
-
-	@Column(name = "address", nullable = false)
-	private String address;
+	private RestaurantId restaurantId;
 
 	public Restaurant() {
 		super();
 	}
 
-	public Restaurant(String resturantName, String address) {
+	public Restaurant(RestaurantId restaurantId) {
 		super();
-		this.resturantName = resturantName;
-		this.address = address;
+		this.restaurantId = restaurantId;
 	}
 
-	public int getResturantId() {
-		return resturantId;
+	public RestaurantId getRestaurantId() {
+		return restaurantId;
 	}
 
-	public void setResturantId(int resturantId) {
-		this.resturantId = resturantId;
-	}
-
-	public String getResturantName() {
-		return resturantName;
-	}
-
-	public void setResturantName(String resturantName) {
-		this.resturantName = resturantName;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
+	public void setRestaurantId(RestaurantId restaurantId) {
+		this.restaurantId = restaurantId;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + resturantId;
-		result = prime * result + ((resturantName == null) ? 0 : resturantName.hashCode());
+		result = prime * result + ((restaurantId == null) ? 0 : restaurantId.hashCode());
 		return result;
 	}
 
@@ -72,25 +47,17 @@ public class Restaurant {
 		if (getClass() != obj.getClass())
 			return false;
 		Restaurant other = (Restaurant) obj;
-		if (address == null) {
-			if (other.address != null)
+		if (restaurantId == null) {
+			if (other.restaurantId != null)
 				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (resturantId != other.resturantId)
-			return false;
-		if (resturantName == null) {
-			if (other.resturantName != null)
-				return false;
-		} else if (!resturantName.equals(other.resturantName))
+		} else if (!restaurantId.equals(other.restaurantId))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Restaurant [resturantId=" + resturantId + ", resturantName=" + resturantName + ", address=" + address
-				+ "]";
+		return "Restaurant [restaurantId=" + restaurantId + "]";
 	}
 
 }

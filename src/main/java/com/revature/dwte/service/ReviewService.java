@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.revature.dwte.controller.ReviewsController;
 import com.revature.dwte.dao.ReviewsDao;
 import com.revature.dwte.dto.AddReviewDTO;
 import com.revature.dwte.model.Review;
@@ -16,9 +15,7 @@ import com.revature.dwte.model.User;
 @Service
 public class ReviewService implements ReviewServiceInterface {
 
-	private Logger logger = LoggerFactory.getLogger(ReviewsController.class);
-
-	private Logger logger = LoggerFactory.getLogger(ReviewsController.class);
+	private Logger logger = LoggerFactory.getLogger(ReviewService.class);
 
 	@Autowired
 	private ReviewsDao reviewDao;
@@ -40,6 +37,7 @@ public class ReviewService implements ReviewServiceInterface {
 	}
 
 	public void deleteReviews(User currentlyLoggedInUser, int reviewId) {
+		logger.info("ReviewService.deleteReviews() invoked");
 
 		this.reviewDao.deleteReviews(currentlyLoggedInUser.getUserId(), reviewId);
 	}

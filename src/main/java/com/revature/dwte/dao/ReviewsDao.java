@@ -62,20 +62,9 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	public void deleteReviews(int reviewId) {
 		logger.info("ReviewsDao.deleteReviews() invoked");
 
-		try {
-			User currentlyLoggedInUser = entityManager.find(User.class, userIdOfCurrentlyLoggedInUser);
-
-			Review reviewToAdd = new Review(dto.getRatings(), dto.getReview(), dto.getSubmittedDate(),
-					dto.getResturantsId(), currentlyLoggedInUser);
-
-			entityManager.persist(reviewToAdd);
-
-			return reviewToAdd;
-		} catch (DataAccessException e) {
-
-			e.printStackTrace();
-			return null;
-		}
+		Review r = entityManager.find(Review.class, reviewId);
+		
+		entityManager.remove(r);
 
 	}
 

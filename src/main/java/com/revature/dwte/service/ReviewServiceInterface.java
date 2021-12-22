@@ -2,14 +2,14 @@ package com.revature.dwte.service;
 
 import java.util.List;
 
-import com.revature.dwte.dto.AddReviewDTO;
-import com.revature.dwte.model.Restaurant;
+import com.revature.dwte.exception.InvalidParameterException;
+import com.revature.dwte.exception.ReviewDoesNotExist;
 import com.revature.dwte.model.Review;
 import com.revature.dwte.model.User;
 
 public interface ReviewServiceInterface {
 
-	public List<Review> getAllReview();
+	public List<Review> getAllReview() throws ReviewDoesNotExist, InvalidParameterException;
 
 	public Review addNewReview(User currentlyLoggedInUser, String rating, String review, String restaurantId);
 

@@ -42,6 +42,15 @@ public class Review {
 		super();
 	}
 
+	public Review(String ratings, String review, String submittedDate, int restaurantId, int authorId) {
+		super();
+		this.ratings = ratings;
+		this.review = review;
+		this.submittedDate = submittedDate;
+		this.restaurantId = restaurantId;
+		this.authorId = authorId;
+	}
+
 	public int getReviewId() {
 		return reviewId;
 	}

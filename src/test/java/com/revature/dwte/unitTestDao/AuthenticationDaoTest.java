@@ -187,7 +187,6 @@ public class AuthenticationDaoTest {
 		expected.add(user);
 
 		Assertions.assertEquals(expected, actual);
-		Assertions.assertEquals(expected, actual);
 
 	}
 

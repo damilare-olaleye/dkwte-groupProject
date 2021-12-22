@@ -1,12 +1,14 @@
 package com.revature.dwte.dao;
 
+import java.util.List;
+
 import com.revature.dwte.model.User;
 
 public interface AuthenticationDaoInterface {
 
-	public User getLoginUser(String email, String password);
+	public List<User> getUserByEmailAndPhoneNumber(String email, String password);
 
 	public void signUpUser(User user);
 
-	public User getUserById(int id);
+	public User getUserByUserId(int id);
 }

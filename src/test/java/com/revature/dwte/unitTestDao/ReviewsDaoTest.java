@@ -25,17 +25,13 @@ public class ReviewsDaoTest {
 	@Autowired
 	private ReviewsDao reviewDao;
 
-	// POSTIVE TEST
-//	@Test
-//	@Transactional
-//	public Review getAddNewReviewPostive() {
-//
-//		User currentlyLoggedInUser = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372",
-//				"Member");
-//		this.entityManager.persist(currentlyLoggedInUser);
-//
-//		this.entityManager.flush();
-//
-//	}
-
+	/*-	*******************
+	 * 	getAllReviews Tests
+	 * 	*******************
+	 */
+	@Test
+	@Transactional
+	public void testGetAllReviews_positive() {
+		Review review = new Review("4 starts", "");
+	}
 }

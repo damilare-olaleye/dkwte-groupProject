@@ -65,7 +65,8 @@ public class AuthenticationController {
 			HttpSession session = req.getSession();
 			session.setAttribute(CURRENTUSER, user);
 
-			return ResponseEntity.status(200).body(user);
+			return ResponseEntity.status(200).body("Successfully logged in as " + user.getFirst_name() + " "
+					+ user.getLast_name() + ", " + user.getRole());
 
 		} catch (InvalidLoginException e) {
 

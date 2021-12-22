@@ -44,7 +44,6 @@ public class ReviewsDao implements ReviewsDaoInterface {
 			int authorId) {
 		logger.info("ReviewsDao.addNewReview() invoked");
 
-
 		Review reviewToAdd = new Review();
 
 		reviewToAdd.setRatings(rating);
@@ -62,9 +61,9 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	public void deleteReviews(int reviewId) {
 		logger.info("ReviewsDao.deleteReviews() invoked");
 
-		Review r = entityManager.find(Review.class, reviewId);
-		
-		entityManager.remove(r);
+		Review reviewToDelete = entityManager.find(Review.class, reviewId);
+
+		entityManager.persist(reviewToDelete);
 
 	}
 

@@ -123,7 +123,7 @@ public class AuthenticationDaoTest {
 	 */
 	@Test
 	@Transactional
-	public void testSignUpUserAsAdmin_positive() {
+	public void testSignUpUser_admin_positive() {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Admin");
 		this.authDao.signUpUser(user);
 
@@ -139,7 +139,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testSignUpUserAsMember_positive() {
+	public void testSignUpUser_member_positive() {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
 		this.authDao.signUpUser(user);
 
@@ -223,9 +223,9 @@ public class AuthenticationDaoTest {
 		});
 	}
 
-	/*-	*****************
-	 * 	getUserById Tests
-	 * 	*****************
+	/*-	*********************
+	 * 	getUserByUserId Tests
+	 * 	*********************
 	 */
 	@Test
 	@Transactional

@@ -21,7 +21,7 @@ public class Review {
 	@Column(name = "review")
 	private String review;
 
-	@Column(name = "submit_date", updatable = false)
+	@Column(name = "submit_date", updatable = false, nullable = false)
 	private String submittedDate;
 
 	@ManyToOne
@@ -40,6 +40,15 @@ public class Review {
 
 	public Review() {
 		super();
+	}
+
+	public Review(String ratings, String review, String submittedDate, int restaurantId, int authorId) {
+		super();
+		this.ratings = ratings;
+		this.review = review;
+		this.submittedDate = submittedDate;
+		this.restaurantId = restaurantId;
+		this.authorId = authorId;
 	}
 
 	public int getReviewId() {

@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.revature.dwte.model.Review;
+import com.revature.dwte.model.User;
 
 @Repository
 public class ReviewsDao implements ReviewsDaoInterface {
@@ -31,9 +32,10 @@ public class ReviewsDao implements ReviewsDaoInterface {
 
 			return reviews;
 
-		} catch (DataAccessException e) {
+		} catch (NoResultException e) {
 
 			e.printStackTrace();
+
 			return null;
 		}
 
@@ -44,27 +46,35 @@ public class ReviewsDao implements ReviewsDaoInterface {
 			int authorId) {
 		logger.info("ReviewsDao.addNewReview() invoked");
 
+		try {
+			Review reviewToAdd = new Review();
 
-		Review reviewToAdd = new Review();
+			reviewToAdd.setRatings(rating);
+			reviewToAdd.setReview(experienceReview);
+			reviewToAdd.setSubmittedDate(submittedDate);
+			reviewToAdd.setRestaurantId(restaurantId);
+			reviewToAdd.setAuthorId(authorId);
 
-		reviewToAdd.setRatings(rating);
-		reviewToAdd.setReview(experienceReview);
-		reviewToAdd.setSubmittedDate(submittedDate);
-		reviewToAdd.setRestaurantId(restaurantId);
-		reviewToAdd.setAuthorId(authorId);
+			this.entityManager.persist(reviewToAdd);
 
-		this.entityManager.persist(reviewToAdd);
+			return reviewToAdd;
 
-		return reviewToAdd;
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+
+			return null;
+		}
+
 	}
 
 	@Transactional
 	public void deleteReviews(int reviewId) {
 		logger.info("ReviewsDao.deleteReviews() invoked");
 
-		Review r = entityManager.find(Review.class, reviewId);
-		
-		entityManager.remove(r);
+		Review reviewToDelete = entityManager.find(Review.class, reviewId);
+
+		entityManager.remove(reviewToDelete);
 
 	}
 
@@ -77,14 +87,14 @@ public class ReviewsDao implements ReviewsDaoInterface {
 					.setParameter("reviewId", reviewId).getSingleResult();
 
 			return review;
-		} catch (NoResultException e) {
+		} catch (DataAccessException e) {
 			return null;
 		}
 
 	}
 
 	@Transactional
-	public List<Review> getReviewByRestaurantId(int restaurantId) {
+	public List<Review> getReviewsByRestaurantId(int restaurantId) {
 		logger.info("ReviewsDao.getReviewsByReviewId() invoked");
 
 		try {
@@ -93,7 +103,7 @@ public class ReviewsDao implements ReviewsDaoInterface {
 					.setParameter("restaurantId", restaurantId).getResultList();
 
 			return reviews;
-		} catch (NoResultException e) {
+		} catch (DataAccessException e) {
 			return null;
 		}
 	}

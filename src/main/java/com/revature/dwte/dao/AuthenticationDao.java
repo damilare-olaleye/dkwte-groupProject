@@ -3,6 +3,7 @@ package com.revature.dwte.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -22,7 +23,7 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 	private Logger logger = LoggerFactory.getLogger(AuthenticationDao.class);
 
 	@Transactional
-	public User getLoginUser(String email, String password) {
+	public User getUserByEmailAndPassword(String email, String password) {
 		logger.info("AuthenticationDao.getLoginUser() invoked");
 
 		try {
@@ -43,8 +44,6 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 	public void signUpUser(User user) {
 		logger.info("AuthenticationDao.getSignupUser() invoked");
 
-
-
 		try {
 			this.entityManager.persist(user);
 
@@ -56,13 +55,21 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 	}
 
 	@Transactional
-	public User getUserById(int id) {
+	public User getUserByUserId(int id) {
 		logger.info("AuthenticationDao.getUserById() invoked");
 
-		User user = entityManager.createQuery("FROM User u WHERE u.userId = :userId", User.class)
-				.setParameter("userId", id).getSingleResult();
+		try {
+			User user = entityManager.createQuery("FROM User u WHERE u.userId = :userId", User.class)
+					.setParameter("userId", id).getSingleResult();
 
-		return user;
+			return user;
+
+		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+
+			return null;
+		}
 
 	}
 
@@ -79,7 +86,7 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 			return users;
 		} catch (DataAccessException e) {
 
-//			e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -96,8 +103,13 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 
 			return user;
 		} catch (DataAccessException e) {
+
+			e.printStackTrace();
+			return null;
+		} catch (NoResultException e) {
 			return null;
 		}
+
 	}
 
 }

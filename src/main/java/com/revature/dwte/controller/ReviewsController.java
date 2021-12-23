@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.dwte.annotation.Admin;
 import com.revature.dwte.annotation.AdminAndMember;
 import com.revature.dwte.exception.InvalidParameterException;
+import com.revature.dwte.exception.ReviewDoesNotExist;
 import com.revature.dwte.model.Review;
 import com.revature.dwte.model.User;
 import com.revature.dwte.service.ReviewService;
@@ -44,12 +45,24 @@ public class ReviewsController {
 
 	// everyone can access
 	@GetMapping(path = "/reviews")
-	public ResponseEntity<Object> getAllReviews() {
+	public ResponseEntity<Object> getAllReviews() throws ReviewDoesNotExist, InvalidParameterException {
 		logger.info("ReviewsController.getAllReviews() invoked");
 
-		List<Review> allReviews = reviewService.getAllReview();
+		try {
+			List<Review> allReviews = reviewService.getAllReview();
+			logger.info("reviews {} ",allReviews);
 
-		return ResponseEntity.status(200).body(allReviews);
+			if (allReviews.isEmpty()) {
+				throw new ReviewDoesNotExist();
+			}
+
+			return ResponseEntity.status(200).body(allReviews);
+
+		} catch (ReviewDoesNotExist e) {
+
+			return ResponseEntity.status(400).body(e.getMessage());
+
+		}
 
 	}
 
@@ -62,7 +75,7 @@ public class ReviewsController {
 		try {
 			User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
 
-			logger.info("restaurant id from review {}", json.get("restaurantId"));
+			logger.debug("restaurant id from review {}", json.get("restaurantId"));
 
 			validateUtil.verifyNewReview(json.get("rating"), json.get("review"), json.get("restaurantId"));
 

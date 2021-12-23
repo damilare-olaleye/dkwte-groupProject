@@ -17,6 +17,6 @@ public interface ReviewsDaoInterface {
 
 	public Review getReviewsByReviewId(int reviewId);
 
-	public List<Review> getReviewByRestaurantId(int restaurantId);
+	public List<Review> getReviewsByRestaurantId(int restaurantId);
 
 }

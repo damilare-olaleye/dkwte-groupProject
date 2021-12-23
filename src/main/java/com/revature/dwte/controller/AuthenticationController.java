@@ -2,6 +2,7 @@ package com.revature.dwte.controller;
 
 import java.security.NoSuchAlgorithmException;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -56,19 +57,23 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(path = "/login")
-	public ResponseEntity<Object> login(@RequestBody LoginDTO dto) throws NoSuchAlgorithmException {
+	public ResponseEntity<Object> login(@RequestBody LoginDTO dto)
+			throws NoSuchAlgorithmException, InvalidParameterException, InvalidLoginException {
 		logger.info("AuthenticationController.login() invoked");
 
 		try {
-			User user = this.authService.logInUser(dto.getEmail(), dto.getPassword());
+
+			validateUtil.verifyLoginInput(dto);
+
+			User user = this.authService.getUserByEmailAndPassword(dto.getEmail(), dto.getPassword());
 
 			HttpSession session = req.getSession();
 			session.setAttribute(CURRENTUSER, user);
 
-			return ResponseEntity.status(200).body(user);
+			return ResponseEntity.status(200).body("Successfully logged in as " + user.getFirst_name() + " "
+					+ user.getLast_name() + ", " + user.getRole());
 
-		} catch (InvalidLoginException e) {
-
+		} catch (NoResultException e) {
 			return ResponseEntity.status(400).body(e.getMessage());
 
 		}

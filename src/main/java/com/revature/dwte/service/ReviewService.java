@@ -7,9 +7,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.revature.dwte.dao.ReviewsDao;
+import com.revature.dwte.exception.InvalidParameterException;
+import com.revature.dwte.exception.ReviewDoesNotExist;
 import com.revature.dwte.model.Review;
 import com.revature.dwte.model.User;
 
@@ -23,10 +26,22 @@ public class ReviewService implements ReviewServiceInterface {
 	@Autowired
 	private ReviewsDao reviewDao;
 
-	public List<Review> getAllReview() {
+	public List<Review> getAllReview() throws ReviewDoesNotExist, InvalidParameterException {
 		logger.info("ReviewService.getReviews() invoked");
 
-		return reviewDao.getAllReviews();
+		List<Review> reviews = this.reviewDao.getAllReviews();
+
+		try {
+			if (reviews.isEmpty()) {
+				throw new ReviewDoesNotExist("No reviews on file.");
+			}
+
+			return reviews;
+
+		} catch (DataAccessException e) {
+
+			throw new InvalidParameterException("No reviews on file.");
+		}
 
 	}
 
@@ -64,7 +79,7 @@ public class ReviewService implements ReviewServiceInterface {
 	public List<Review> getReviewsByRestaurantId(int restaurantId) {
 		logger.info("ReviewService.getReviewsByRestaurantId() invoked");
 
-		List<Review> reviews = this.reviewDao.getReviewByRestaurantId(restaurantId);
+		List<Review> reviews = this.reviewDao.getReviewsByRestaurantId(restaurantId);
 
 		return reviews;
 	}

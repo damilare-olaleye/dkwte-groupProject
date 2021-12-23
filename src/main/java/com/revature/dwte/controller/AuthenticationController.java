@@ -70,11 +70,16 @@ public class AuthenticationController {
 			HttpSession session = req.getSession();
 			session.setAttribute(CURRENTUSER, user);
 
-			return ResponseEntity.status(200).body(user);
+			return ResponseEntity.status(200).body("Sucessfully logged in as " + user.getFirst_name() + " "
+					+ user.getLast_name() + ", " + user.getRole());
 
 		} catch (NoResultException e) {
 			return ResponseEntity.status(400).body(e.getMessage());
 
+		} catch (InvalidLoginException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+		} catch (InvalidParameterException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
 		}
 
 	}
@@ -87,16 +92,16 @@ public class AuthenticationController {
 	}
 
 	@PostMapping(path = "/signup")
-	public ResponseEntity<Object> login(@RequestBody User dto) throws NoSuchAlgorithmException, NotFoundException {
+	public ResponseEntity<Object> signUp(@RequestBody User user) throws NoSuchAlgorithmException, NotFoundException {
 		logger.info("AuthenticationController.signUp() invoked");
 
 		try {
 
 			// validate all the input for sign up
-			validateUtil.verifySignUp(dto);
+			validateUtil.verifySignUp(user);
 
-			this.authService.signUpUser(dto.getFirst_name(), dto.getLast_name(), dto.getEmail(), dto.getPassword(),
-					dto.getPhone_number(), dto.getRole());
+			this.authService.signUpUser(user.getFirst_name(), user.getLast_name(), user.getEmail(), user.getPassword(),
+					user.getPhone_number(), user.getRole());
 
 			return ResponseEntity.status(200).body("Successfully signed up.");
 

@@ -287,7 +287,7 @@ public class ValidateUtil {
 		}
 		if (StringUtils.isBlank(restaurantId)) {
 			if (blankInputBoolean) {
-				blankInputString.append(", restaurant ID ");
+				blankInputString.append(", restaurant ID");
 				blankInputBoolean = true;
 			} else {
 				blankInputString.append("Restaurant ID");
@@ -367,7 +367,7 @@ public class ValidateUtil {
 		}
 		if (StringUtils.isBlank(dto.getPassword())) {
 			if (blankInputBoolean) {
-				blankInputString.append(", password ");
+				blankInputString.append(", password");
 				blankInputBoolean = true;
 			} else {
 				blankInputString.append("Password");

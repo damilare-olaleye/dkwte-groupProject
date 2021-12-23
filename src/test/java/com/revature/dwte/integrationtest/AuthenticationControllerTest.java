@@ -1,4 +1,4 @@
-package com.revature.dwte.integrationtests;
+package com.revature.dwte.integrationtest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

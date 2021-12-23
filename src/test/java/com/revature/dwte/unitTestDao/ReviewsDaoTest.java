@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +14,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.web.client.ExpectedCount;
 
 import com.revature.dwte.dao.ReviewsDao;
 import com.revature.dwte.model.Review;

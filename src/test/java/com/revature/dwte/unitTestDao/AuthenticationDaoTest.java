@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +15,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.revature.dwte.dao.AuthenticationDao;
-import com.revature.dwte.model.Review;
 import com.revature.dwte.model.User;
 
 @SpringBootTest
@@ -153,6 +151,76 @@ public class AuthenticationDaoTest {
 		Assertions.assertEquals(expected, actual);
 
 		this.entityManager.flush();
+	}
+
+	@Test
+	@Transactional
+	public void testSignUpUserAsMember_blankFirstName() {
+		User user = new User(null, "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.authDao.signUpUser(user);
+		});
+	}
+
+	@Test
+	@Transactional
+	public void testSignUpUserAsMember_blankLastName() {
+		User user = new User("Jane", null, "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.authDao.signUpUser(user);
+		});
+	}
+
+	@Test
+	@Transactional
+	public void testSignUpUserAsMember_blankEmail() {
+		User user = new User("Jane", "Doe", null, "Jane!123", "5712561234", "Member");
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.authDao.signUpUser(user);
+		});
+	}
+
+	@Test
+	@Transactional
+	public void testSignUpUserAsMember_blankPassword() {
+		User user = new User("Jane", "Doe", "jane_doe@gmail.com", null, "5712561234", "Member");
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.authDao.signUpUser(user);
+		});
+	}
+
+	@Test
+	@Transactional
+	public void testSignUpUserAsMember_blankPhoneNumber() {
+		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", null, "Member");
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.authDao.signUpUser(user);
+		});
+	}
+
+	@Test
+	@Transactional
+	public void testSignUpUserAsMember_blankUserRole() {
+		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", null);
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.authDao.signUpUser(user);
+		});
+	}
+
+	@Test
+	@Transactional
+	public void testSignUpUserAsMember_allInPutBlank() {
+		User user = new User(null, null, null, null, null, null);
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.authDao.signUpUser(user);
+		});
 	}
 
 	/*-	*****************

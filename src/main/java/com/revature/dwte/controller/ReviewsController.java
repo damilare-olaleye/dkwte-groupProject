@@ -75,7 +75,7 @@ public class ReviewsController {
 		try {
 			User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
 
-			logger.info("restaurant id from review {}", json.get("restaurantId"));
+			logger.debug("restaurant id from review {}", json.get("restaurantId"));
 
 			validateUtil.verifyNewReview(json.get("rating"), json.get("review"), json.get("restaurantId"));
 

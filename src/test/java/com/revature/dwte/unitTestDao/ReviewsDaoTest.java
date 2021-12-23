@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.web.client.ExpectedCount;
 
 import com.revature.dwte.dao.ReviewsDao;
 import com.revature.dwte.model.Review;
@@ -33,24 +37,175 @@ public class ReviewsDaoTest {
 	@Test
 	@Transactional
 	public void testGetAllReviews_positive() {
-		Review review = new Review("4 starts", "this place is great", "12-22-21", 1, 1);
-
+		Review review = new Review("4 stars", "this place is great", "12-22-21", 1, 1);
 		this.entityManager.persist(review);
+
+		this.entityManager.flush();
+		// ACT
+		List<Review> actual = this.reviewDao.getAllReviews();
+
+		// ASSERT
+		Review review1 = new Review("4 stars", "this place is great", "12-22-21", 1, 1);
+		review1.setReviewId(1);
+
+		List<Review> expected = new ArrayList<Review>();
+		expected.add(review1);
+
+		Assertions.assertEquals(expected, actual);
+	}
+
+	@Test
+	@Transactional
+	public void testGetAllReviews_reviewDoesNotExist() {
+
+		// ARRANGE - not required to arrange
 
 		// ACT
 		List<Review> actual = this.reviewDao.getAllReviews();
 
 		// ASSERT
-		Review review1 = new Review("4 starts", "this place is great", "12-22-21", 1, 1);
+		List<Review> expected = new ArrayList<>();
+
+		Assertions.assertEquals(expected, actual);
+	}
+
+	/*-	******************
+	 * 	addNewReview Tests
+	 * 	******************
+	 */
+	@Test
+	@Transactional
+	public void testAddNewReview_withReviewDescritpion_positive() {
+		Review actual = reviewDao.addNewReview("4 stars", "this place is great", "12-22-21", 1, 1);
+
+		this.entityManager.flush();
+
+		Review expected = new Review("4 stars", "this place is great", "12-22-21", 1, 1);
+		expected.setReviewId(1);
+
+		Assertions.assertEquals(expected, actual);
+
+	}
+
+	@Test
+	@Transactional
+	public void testAddNewReview_withNoReviewDescritpion_positive() {
+		Review actual = reviewDao.addNewReview("4 stars", null, "12-22-21", 1, 1);
+
+		this.entityManager.flush();
+
+		Review expected = new Review("4 stars", null, "12-22-21", 1, 1);
+		expected.setReviewId(1);
+
+		Assertions.assertEquals(expected, actual);
+
+	}
+
+	@Test
+	@Transactional
+	public void testAddNewReview_blankRating() {
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.reviewDao.addNewReview(null, "this place is great", "12-22-21", 1, 1);
+		});
+
+	}
+
+	@Test
+	@Transactional
+	public void testAddNewReview_blankSubmittedDate() {
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.reviewDao.addNewReview("4 stars", "this place is great", null, 1, 1);
+		});
+
+	}
+
+	/*-	*************
+	 * 	deleteReviews
+	 * 	*************
+	 */
+	@Test
+	@Transactional
+	public void testDeleteRevies_positive() {
+		Review review = reviewDao.addNewReview("4 stars", "this place is great", "12-22-21", 1, 1);
 		review.setReviewId(1);
+		this.entityManager.persist(review);
+
+		this.entityManager.flush();
+
+		reviewDao.deleteReviews(1);
+
+		List<Review> deletedReview = reviewDao.getAllReviews();
+
+		Assertions.assertTrue(deletedReview.isEmpty());
+	}
+
+	/*- *******************
+	 *  getReviewByReviewId
+	 *  *******************
+	 */
+	@Test
+	@Transactional
+	public void testGetReviewByReviewId_possitive() {
+		Review review = reviewDao.addNewReview("4 stars", "this place is great", "12-22-21", 1, 1);
+		review.setReviewId(1);
+		this.entityManager.persist(review);
+
+		this.entityManager.flush();
+
+		Review actual = this.reviewDao.getReviewsByReviewId(1);
+
+		Review expected = reviewDao.addNewReview("4 stars", "this place is great", "12-22-21", 1, 1);
+		expected.setReviewId(1);
+
+		Assertions.assertEquals(expected, actual);
+	}
+
+	@Test
+	@Transactional
+	public void testGetReviewByReviewId_reviewDoesNotExist() {
+
+		Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
+			this.reviewDao.getReviewsByReviewId(1);
+		});
+
+	}
+
+	/*-	**********************************
+	 * 	getReviewsByRestaurantId Tests
+	 * 	**********************************
+	 */
+	@Test
+	@Transactional
+	public void testGetReviewByRestaurantId_possitive() {
+		Review review = new Review("4 stars", "this place is great", "12-22-21", 1, 1);
+		this.entityManager.persist(review);
+
+		this.entityManager.flush();
+
+		List<Review> actual = this.reviewDao.getReviewsByRestaurantId(1);
+
+		Review review1 = new Review("4 stars", "this place is great", "12-22-21", 1, 1);
+		review1.setReviewId(1);
 
 		List<Review> expected = new ArrayList<Review>();
 		expected.add(review1);
 
 		Assertions.assertEquals(expected, actual);
 
-		this.entityManager.flush();
 	}
-	
-	
+
+	@Test
+	@Transactional
+	public void testGetReviewByRestaurantId_reviewDoesNotExist() {
+
+		List<Review> actual = this.reviewDao.getReviewsByRestaurantId(1);
+
+		List<Review> expected = new ArrayList<>();
+
+		Assertions.assertEquals(expected, actual);
+
+	}
+
 }

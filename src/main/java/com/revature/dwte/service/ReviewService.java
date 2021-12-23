@@ -79,7 +79,7 @@ public class ReviewService implements ReviewServiceInterface {
 	public List<Review> getReviewsByRestaurantId(int restaurantId) {
 		logger.info("ReviewService.getReviewsByRestaurantId() invoked");
 
-		List<Review> reviews = this.reviewDao.getReviewByRestaurantId(restaurantId);
+		List<Review> reviews = this.reviewDao.getReviewsByRestaurantId(restaurantId);
 
 		return reviews;
 	}

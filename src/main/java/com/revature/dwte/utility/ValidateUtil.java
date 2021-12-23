@@ -1,16 +1,20 @@
 package com.revature.dwte.utility;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.persistence.NoResultException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.revature.dwte.dto.LoginDTO;
+import com.revature.dwte.exception.InvalidLoginException;
 import com.revature.dwte.exception.InvalidParameterException;
 import com.revature.dwte.model.Restaurant;
 import com.revature.dwte.model.Review;
@@ -113,7 +117,7 @@ public class ValidateUtil {
 		boolean emailPhoneNumberExistBoolean = false;
 		StringBuilder emailPhoneNumberExistString = new StringBuilder();
 
-		logger.info("databaseUser {}", databaseUser);
+		logger.debug("databaseUser {}", databaseUser);
 
 		if (databaseUser != null) {
 
@@ -298,7 +302,7 @@ public class ValidateUtil {
 
 		Integer restaurantIdInput = Integer.parseInt(restaurantId);
 
-		logger.info("restaurantId {}", restaurantIdInput);
+		logger.debug("restaurantId {}", restaurantIdInput);
 
 		/*-
 		 *  check if restaurant exist
@@ -341,6 +345,39 @@ public class ValidateUtil {
 
 		if (databaseRestaurant == null) {
 			throw new InvalidParameterException("Restaurant with the ID of " + restaurantId + " does not exist.");
+		}
+
+	}
+
+	public void verifyLoginInput(LoginDTO dto)
+			throws NoSuchAlgorithmException, InvalidLoginException, InvalidParameterException {
+		logger.info("ValidteUtil.verifyRestaurantId() invoked");
+
+		/*-
+		 *  Check if inputs are blank
+		 */
+		logger.info("check if email and password are blank");
+
+		boolean blankInputBoolean = false;
+		StringBuilder blankInputString = new StringBuilder();
+
+		if (StringUtils.isBlank(dto.getEmail())) {
+			blankInputString.append("Email");
+			blankInputBoolean = true;
+		}
+		if (StringUtils.isBlank(dto.getPassword())) {
+			if (blankInputBoolean) {
+				blankInputString.append(", password ");
+				blankInputBoolean = true;
+			} else {
+				blankInputString.append("Password");
+				blankInputBoolean = true;
+			}
+		}
+		if (blankInputBoolean) {
+			blankInputString.append(" cannot be blank.");
+			// .toString turn StringBuilder into a string
+			throw new InvalidParameterException(blankInputString.toString());
 		}
 
 	}

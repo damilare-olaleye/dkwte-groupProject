@@ -40,7 +40,7 @@ public class AuthenticationDaoTest {
 		this.entityManager.flush();
 
 		// ACT
-		User actual = this.authDao.getUserByEmailAndPasswordUser("nedoe@yahoo.com", "disIsMyPassword13");
+		User actual = this.authDao.getUserByEmailAndPassword("nedoe@yahoo.com", "disIsMyPassword13");
 
 		// ASSERT
 		User expected = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
@@ -59,7 +59,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("nedoe@yahoo.com", "DisIsmyPass13");
+			this.authDao.getUserByEmailAndPassword("nedoe@yahoo.com", "DisIsmyPass13");
 		});
 
 	}
@@ -74,7 +74,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("nodoe@yahoo.com", "disIsMyPassword13");
+			this.authDao.getUserByEmailAndPassword("nodoe@yahoo.com", "disIsMyPassword13");
 		});
 
 	}
@@ -89,7 +89,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("nodoe@yahoo.com", "DisIsmyPass13");
+			this.authDao.getUserByEmailAndPassword("nodoe@yahoo.com", "DisIsmyPass13");
 		});
 
 	}
@@ -104,7 +104,7 @@ public class AuthenticationDaoTest {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Admin");
 		this.authDao.signUpUser(user);
 
-		User actual = this.authDao.getUserByEmailAndPasswordUser("jane_doe@gmail.com", "Jane!123");
+		User actual = this.authDao.getUserByEmailAndPassword("jane_doe@gmail.com", "Jane!123");
 
 		User expected = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Admin");
 		expected.setUserId(1);
@@ -120,7 +120,7 @@ public class AuthenticationDaoTest {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
 		this.authDao.signUpUser(user);
 
-		User actual = this.authDao.getUserByEmailAndPasswordUser("jane_doe@gmail.com", "Jane!123");
+		User actual = this.authDao.getUserByEmailAndPassword("jane_doe@gmail.com", "Jane!123");
 
 		User expected = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
 		expected.setUserId(1);
@@ -140,6 +140,8 @@ public class AuthenticationDaoTest {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
 		this.authDao.signUpUser(user);
 
+		this.entityManager.flush();
+
 		User actual = this.authDao.getUserByUserId(1);
 
 		User expected = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
@@ -147,13 +149,14 @@ public class AuthenticationDaoTest {
 
 		Assertions.assertEquals(expected, actual);
 
-		this.entityManager.flush();
 	}
 
 	@Test
 	@Transactional
 	public void testGetUserByUserId_userIdBlank() {
-		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
+		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
+		this.authDao.signUpUser(user);
+
 		this.entityManager.persist(user);
 
 		this.entityManager.flush();
@@ -200,7 +203,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("nedo@yahoo.com", "2039008372");
+			this.authDao.getUserByEmailAndPassword("nedo@yahoo.com", "2039008372");
 		});
 
 	}
@@ -215,7 +218,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("nedoe@yahoo.com", "2009008372");
+			this.authDao.getUserByEmailAndPassword("nedoe@yahoo.com", "2009008372");
 		});
 
 	}
@@ -230,7 +233,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("nedoe@yahoo.com", "");
+			this.authDao.getUserByEmailAndPassword("nedoe@yahoo.com", "");
 		});
 
 	}
@@ -245,7 +248,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("", "2039008372");
+			this.authDao.getUserByEmailAndPassword("", "2039008372");
 		});
 
 	}
@@ -260,7 +263,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("", "");
+			this.authDao.getUserByEmailAndPassword("", "");
 		});
 
 	}
@@ -275,7 +278,7 @@ public class AuthenticationDaoTest {
 
 		// ACT AND ASSERT
 		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmailAndPasswordUser("nedo@yahoo.com", "2009038372");
+			this.authDao.getUserByEmailAndPassword("nedo@yahoo.com", "2009038372");
 		});
 
 	}
@@ -306,15 +309,14 @@ public class AuthenticationDaoTest {
 	@Test
 	@Transactional
 	public void testGetUserByEmail_incorrectEmailInput() {
-		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
-		this.entityManager.persist(user);
+		User expected = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
+		this.entityManager.persist(expected);
 
 		this.entityManager.flush();
 
-		// ACT AND ASSERT
-		Assertions.assertThrows(DataAccessException.class, () -> {
-			this.authDao.getUserByEmail("nodoe@yahoo.com");
-		});
+		User actual = this.authDao.getUserByEmail("nodoe@yahoo.com");
+
+		Assertions.assertNotEquals(expected, actual);
 
 	}
 

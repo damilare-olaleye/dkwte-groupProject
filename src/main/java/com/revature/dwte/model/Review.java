@@ -21,7 +21,7 @@ public class Review {
 	@Column(name = "review")
 	private String review;
 
-	@Column(name = "submit_date", updatable = false)
+	@Column(name = "submit_date", updatable = false, nullable = false)
 	private String submittedDate;
 
 	@ManyToOne

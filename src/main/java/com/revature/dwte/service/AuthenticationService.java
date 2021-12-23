@@ -3,6 +3,8 @@ package com.revature.dwte.service;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,8 @@ public class AuthenticationService {
 
 	private Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
-	public User logInUser(String email, String password) throws InvalidLoginException, NoSuchAlgorithmException {
+	public User getUserByEmailAndPassword(String email, String password)
+			throws InvalidLoginException, NoSuchAlgorithmException {
 		logger.info("AuthenticationService.setLoginUser() invoked");
 
 		User user = this.authenticationDao.getUserByEmail(email);
@@ -43,14 +46,14 @@ public class AuthenticationService {
 				if (isCorrectPassword) {
 					return user;
 				} else {
-					throw new InvalidLoginException("Incorrect username and/or password");
+					throw new InvalidLoginException("Incorrect email and/or password");
 				}
 			} else {
-				throw new InvalidLoginException("Username and/or password is incorrect");
+				throw new NoResultException("Incorrect email and/or password");
 			}
 
 		} catch (DataAccessException e) {
-			throw new InvalidLoginException("Username and/or password is incorrect");
+			throw new InvalidLoginException("Incorrect email and/or password");
 		}
 	}
 

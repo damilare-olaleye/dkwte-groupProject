@@ -36,6 +36,9 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 
 			e.printStackTrace();
 			return null;
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			return null;
 		}
 
 	}
@@ -68,6 +71,9 @@ public class AuthenticationDao implements AuthenticationDaoInterface {
 
 			e.printStackTrace();
 
+			return null;
+		} catch (NoResultException e) {
+			e.printStackTrace();
 			return null;
 		}
 

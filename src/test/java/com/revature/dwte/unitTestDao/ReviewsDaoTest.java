@@ -56,7 +56,7 @@ public class ReviewsDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetAllReviews_reviewDoesNotExist() {
+	public void testGetAllReviews_reviewsDoesNotExist() {
 
 		// ARRANGE - not required to arrange
 
@@ -117,6 +117,26 @@ public class ReviewsDaoTest {
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
 			this.reviewDao.addNewReview("4 stars", "this place is great", null, 1, 1);
+		});
+
+	}
+
+	@Test
+	@Transactional
+	public void testAddNewReview_blankRatingAndSubmittedDate() {
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.reviewDao.addNewReview(null, "this place is great", null, 1, 1);
+		});
+
+	}
+
+	@Test
+	@Transactional
+	public void testAddNewReview_blankRatingAndReviewDescriptionAndSubmittedDate() {
+
+		Assertions.assertThrows(DataAccessException.class, () -> {
+			this.reviewDao.addNewReview(null, null, null, 1, 1);
 		});
 
 	}
@@ -200,9 +220,9 @@ public class ReviewsDaoTest {
 	@Transactional
 	public void testGetReviewByRestaurantId_reviewDoesNotExist() {
 
-		List<Review> actual = this.reviewDao.getReviewsByRestaurantId(1);
+		List<Review> expected = this.reviewDao.getReviewsByRestaurantId(1);
 
-		List<Review> expected = new ArrayList<>();
+		List<Review> actual = new ArrayList<>();
 
 		Assertions.assertEquals(expected, actual);
 

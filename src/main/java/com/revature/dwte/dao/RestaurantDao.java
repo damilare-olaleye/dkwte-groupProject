@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.revature.dwte.model.Restaurant;
 import com.revature.dwte.model.RestaurantCompositeKey;
-import com.revature.dwte.model.User;
 
 @Repository
 public class RestaurantDao implements RestaurantDaoInterface {

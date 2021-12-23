@@ -3,6 +3,8 @@ package com.revature.dwte.model;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -16,6 +18,7 @@ public class Restaurant {
 
 	@Generated(GenerationTime.INSERT)
 	@Column(columnDefinition = "serial", insertable = false)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int restaurantId;
 
 	public Restaurant() {

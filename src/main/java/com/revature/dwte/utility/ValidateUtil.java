@@ -231,7 +231,7 @@ public class ValidateUtil {
 		/*-
 		 *  Check if inputs are blank
 		 */
-		logger.info("check if inputs are blank");
+		logger.info("check if restaurant name and address are blank");
 
 		boolean blankInputBoolean = false;
 		StringBuilder blankInputString = new StringBuilder();
@@ -287,7 +287,7 @@ public class ValidateUtil {
 		}
 		if (StringUtils.isBlank(restaurantId)) {
 			if (blankInputBoolean) {
-				blankInputString.append(", restaurant ID ");
+				blankInputString.append(", restaurant ID");
 				blankInputBoolean = true;
 			} else {
 				blankInputString.append("Restaurant ID");
@@ -367,7 +367,7 @@ public class ValidateUtil {
 		}
 		if (StringUtils.isBlank(dto.getPassword())) {
 			if (blankInputBoolean) {
-				blankInputString.append(", password ");
+				blankInputString.append(", password");
 				blankInputBoolean = true;
 			} else {
 				blankInputString.append("Password");
@@ -380,6 +380,56 @@ public class ValidateUtil {
 			throw new InvalidParameterException(blankInputString.toString());
 		}
 
+	}
+
+	public void verifyRestaurantNameAndAddress(String restaurantName, String restaurantAddress)
+			throws InvalidParameterException {
+		logger.info("ValidteUtil.verifyRestaurantNameAndAddress() invoked");
+
+		/*-
+		 *  Check if inputs are blank
+		 */
+		logger.info("check if restaurant name and address are blank");
+
+		boolean blankInputBoolean = false;
+		StringBuilder blankInputString = new StringBuilder();
+
+		if (StringUtils.isBlank(restaurantName)) {
+			blankInputString.append("Restaurant name");
+			blankInputBoolean = true;
+		}
+		if (StringUtils.isBlank(restaurantAddress)) {
+			if (blankInputBoolean) {
+				blankInputString.append(", restaurant address");
+				blankInputBoolean = true;
+			} else {
+				blankInputString.append("Restaurant address");
+				blankInputBoolean = true;
+			}
+		}
+		if (blankInputBoolean) {
+			blankInputString.append(" cannot be blank.");
+			// .toString turn StringBuilder into a string
+			throw new InvalidParameterException(blankInputString.toString());
+		}
+
+	}
+
+	public void verifyIfRestaurantExist(String restaurantName, String restaurantAddress)
+			throws InvalidParameterException {
+		logger.info("ValidteUtil.verifyRestaurantNameAndAddress() invoked");
+		/*-
+		 *  Check if restaurant already exist
+		 */
+		logger.info("check if restaurant already exist");
+
+		Restaurant databaseRestaurant = restaurantService.getRestaurantByRestaurantNameAndAddress(restaurantName,
+				restaurantAddress);
+
+		if (databaseRestaurant == null) {
+			throw new InvalidParameterException(restaurantName + " with address of " + restaurantAddress
+					+ "does not exist in the database. Please add the restaurant");
+		}
 	}
 
 }

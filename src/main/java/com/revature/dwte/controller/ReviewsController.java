@@ -50,7 +50,7 @@ public class ReviewsController {
 
 		try {
 			List<Review> allReviews = reviewService.getAllReview();
-			logger.info("reviews {} ",allReviews);
+			logger.debug("reviews {} ",allReviews);
 
 			if (allReviews.isEmpty()) {
 				throw new ReviewDoesNotExist();

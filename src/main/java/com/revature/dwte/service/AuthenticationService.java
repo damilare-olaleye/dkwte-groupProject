@@ -28,7 +28,7 @@ public class AuthenticationService {
 
 	public User getUserByEmailAndPassword(String email, String password)
 			throws InvalidLoginException, NoSuchAlgorithmException {
-		logger.info("AuthenticationService.setLoginUser() invoked");
+		logger.info("AuthenticationService.getUserByEmailAndPassword() invoked");
 
 		User user = this.authenticationDao.getUserByEmail(email);
 
@@ -59,7 +59,7 @@ public class AuthenticationService {
 
 	public void signUpUser(String firstName, String lastName, String email, String password, String phoneNumber,
 			String role) throws InvalidParameterException, NotFoundException, NoSuchAlgorithmException {
-		logger.info("AuthenticationService.setSignupUser() invoked");
+		logger.info("AuthenticationService.signUpUser() invoked");
 
 		String algorithm = "SHA-256";
 		String hashedPassword = HashUtil.hashPassword(password.trim(), algorithm);

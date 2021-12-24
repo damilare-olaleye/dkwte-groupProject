@@ -2,6 +2,7 @@ package com.revature.dwte.controller;
 
 import java.util.Map;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,4 +65,28 @@ public class RestaurantController {
 			return ResponseEntity.status(400).body(e.getMessage());
 		}
 	}
+
+	@GetMapping(path = "/restaurant")
+	public ResponseEntity<Object> getRestaurant(@RequestBody Map<String, String> json)
+			throws RestaurantDoesNotExist, InvalidParameterException {
+		logger.info("RestaurantController.getRestaurantId() invoked");
+
+		try {
+			validateUtil.verifyIfRestaurantExist(json.get("restaurantName").trim(),
+					json.get("restaurantAddress").trim());
+
+			Restaurant restaurantId = restaurantService.getRestaurantByRestaurantNameAndAddress(
+					json.get("restaurantName").trim(), json.get("restaurantAddress").trim());
+
+			return ResponseEntity.status(200).body(restaurantId);
+		} catch (NoResultException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+
+		} catch (InvalidParameterException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+
+		}
+
+	}
+
 }

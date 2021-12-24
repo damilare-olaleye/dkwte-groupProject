@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.dwte.annotation.AdminAndMember;
 import com.revature.dwte.exception.InvalidParameterException;
+import com.revature.dwte.exception.RestaurantDoesNotExist;
 import com.revature.dwte.model.Restaurant;
 import com.revature.dwte.model.User;
 import com.revature.dwte.service.RestaurantService;

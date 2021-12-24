@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dwte.dto.LoginDTO;
 import com.revature.dwte.model.User;
@@ -527,4 +526,61 @@ public class AuthenticationControllerTest {
 		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(400))
 				.andExpect(MockMvcResultMatchers.content().string("Email, password cannot be blank."));
 	}
+
+	/*- ************
+	 * 	logout Tests
+	 *  ************
+	 */
+	@Test
+	public void testLogout_positive() throws Exception {
+		/*-
+		 *  ARRANGE
+		 */
+		User user = new User("Jenny", "Doe", "jenny_doe@gmail.com", "Jenny123", "1234567890", "Admin");
+		String jsonToSend = objMapper.writeValueAsString(user);
+
+		/*-
+		 *  ACT and ASSERT
+		 */
+		// send fake http request to /loginstatus
+		MockHttpServletRequestBuilder builder1 = MockMvcRequestBuilders.post("/logout").content(jsonToSend)
+				.contentType(MediaType.APPLICATION_JSON);
+
+		this.mvc.perform(builder1).andExpect(MockMvcResultMatchers.status().is(200))
+				.andExpect(MockMvcResultMatchers.content().string("Successfully logged out."));
+	}
+
+	/*- *****************
+	 *  loginStatus Tests
+	 *  *****************
+	 */
+	@Test
+	public void testLoginStatus_currentlyLogin_positive() throws Exception {
+		LoginDTO user = new LoginDTO("jane_doe1@gmail.com", "Jane!123");
+		String jsonToSend = objMapper.writeValueAsString(user);
+
+		MockMvcRequestBuilders.post("/login").content(jsonToSend).contentType(MediaType.APPLICATION_JSON);
+
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/loginstatus").content(jsonToSend)
+				.contentType(MediaType.APPLICATION_JSON);
+
+		User expectedObject = new User("Jane", "Doe", "jane_doe1@gmail.com", "Jane!123", "5712561234", "Admin");
+		expectedObject.setUserId(1);
+
+		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200)).andExpect(
+				MockMvcResultMatchers.content().string("Sucessfully logged in as " + expectedObject.getFirst_name()
+						+ " " + expectedObject.getLast_name() + ", " + expectedObject.getRole()));
+
+	}
+
+	@Test
+	public void testLoginStatus_currentlyNotLogin_positive() throws Exception {
+
+		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/loginstatus")
+				.contentType(MediaType.APPLICATION_JSON);
+
+		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(401))
+				.andExpect(MockMvcResultMatchers.content().string("You are currently not logged in."));
+	}
+
 }

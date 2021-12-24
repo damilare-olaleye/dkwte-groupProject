@@ -51,7 +51,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testAddRestaurant_blankRestaurantName() {
+	public void testAddRestaurant_blankRestaurantName_negative() {
 		Restaurant restaurant = this.restaurantDao.addRestaurant("Thai Deelish", "Sterling,VA");
 
 		this.entityManager.persist(restaurant);
@@ -71,7 +71,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testAddRestaurant_blankRestaurantAddress() {
+	public void testAddRestaurant_blankRestaurantAddress_negative() {
 		Restaurant restaurant = this.restaurantDao.addRestaurant("Thai Deelish", "Sterling,VA");
 
 		this.entityManager.persist(restaurant);
@@ -91,7 +91,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testAddRestaurant_blankRestaurantNameAndAddress() {
+	public void testAddRestaurant_blankRestaurantNameAndAddress_negative() {
 		Restaurant restaurant = this.restaurantDao.addRestaurant("Thai Deelish", "Sterling,VA");
 
 		this.entityManager.persist(restaurant);
@@ -135,7 +135,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetRestaurantByRestaurantId_restaurantIdBlank() {
+	public void testGetRestaurantByRestaurantId_restaurantIdBlank_negative() {
 		RestaurantCompositeKey restaurantToAdd = new RestaurantCompositeKey("Thai Deelish", "Sterling,VA");
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantCompositeKey(restaurantToAdd);
@@ -155,7 +155,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetRestaurantByRestaurantId_restaurantDoesNotExist() {
+	public void testGetRestaurantByRestaurantId_restaurantDoesNotExist_negative() {
 		RestaurantCompositeKey restaurantToAdd = new RestaurantCompositeKey("Thai Deelish", "Sterling,VA");
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantCompositeKey(restaurantToAdd);
@@ -195,7 +195,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetRestaurantByRestaurantNameAndAddress_blankRestaurantName() {
+	public void testGetRestaurantByRestaurantNameAndAddress_blankRestaurantName_negative() {
 		RestaurantCompositeKey restaurantToAdd = new RestaurantCompositeKey("Thai Deelish", "Sterling,VA");
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantCompositeKey(restaurantToAdd);
@@ -214,7 +214,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetRestaurantByRestaurantNameAndAddress_blankRestaurantAddress() {
+	public void testGetRestaurantByRestaurantNameAndAddress_blankRestaurantAddress_negative() {
 		RestaurantCompositeKey restaurantToAdd = new RestaurantCompositeKey("Thai Deelish", "Sterling,VA");
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantCompositeKey(restaurantToAdd);
@@ -233,7 +233,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetRestaurantByRestaurantNameAndAddress_blankRestaurantNameAndAddress() {
+	public void testGetRestaurantByRestaurantNameAndAddress_blankRestaurantNameAndAddress_negative() {
 		RestaurantCompositeKey restaurantToAdd = new RestaurantCompositeKey("Thai Deelish", "Sterling,VA");
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantCompositeKey(restaurantToAdd);
@@ -252,7 +252,7 @@ public class RestaurantDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetRestaurantByRestaurantNameAndAddress_restaurantDoesNotExist() {
+	public void testGetRestaurantByRestaurantNameAndAddress_restaurantDoesNotExist_negative() {
 		RestaurantCompositeKey restaurantToAdd = new RestaurantCompositeKey("Thai Deelish", "Sterling,VA");
 		Restaurant restaurant = new Restaurant();
 		restaurant.setRestaurantCompositeKey(restaurantToAdd);

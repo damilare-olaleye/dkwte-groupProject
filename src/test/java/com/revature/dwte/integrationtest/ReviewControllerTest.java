@@ -1,5 +1,6 @@
 package com.revature.dwte.integrationtest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -39,9 +40,6 @@ public class ReviewControllerTest {
 	@Autowired
 	private ObjectMapper objMapper;
 
-	@Autowired
-	private ArraysMapper<Review> arrayMapper;
-
 	@BeforeEach
 	public void setUp() {
 		EntityManager entityManager = enitityManagerFactory.createEntityManager();
@@ -63,9 +61,12 @@ public class ReviewControllerTest {
 	 * 	*******************
 	 */
 	@Test
-	public void testGetAllReviews_posotive() throws Exception {
+	public void testGetAllReviews_positive() throws Exception {
 		Review review = new Review("4", "the food is really good", "12-23-21", 1, 1);
-		String jsonToSend = objMapper.writeValueAsString(review);
+
+		List<Review> reviewsList = new ArrayList<>();
+		reviewsList.add(review);
+		String jsonToSend = objMapper.writeValueAsString(reviewsList);
 
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/reviews").content(jsonToSend)
 				.contentType(MediaType.APPLICATION_JSON);
@@ -73,10 +74,23 @@ public class ReviewControllerTest {
 		Review expectedReview = new Review("4", "the food is really good", "12-23-21", 1, 1);
 		expectedReview.setReviewId(1);
 
-		String expectedJsonReview = arrayMapper.(expectedReview);
+		List<Review> expectedReviewsList = new ArrayList<>();
+		expectedReviewsList.add(review);
+		expectedReviewsList.add(expectedReview);
+
+		String expectedJsonReviewList = objMapper.writeValueAsString(expectedReviewsList);
 
 		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200))
-				.andExpect(MockMvcResultMatchers.content().json(expectedJsonReview));
+				.andExpect(MockMvcResultMatchers.content().json(expectedJsonReviewList));
 
+	}
+
+	/*-	*******************
+	 *	addNewReviews Tests
+	 *	*******************
+	 */
+	@Test
+	public void testAddNewReviews_positive() {
+		
 	}
 }

@@ -51,7 +51,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPassword_incorrectPassword() {
+	public void testGetUserByEmailAndPassword_incorrectPassword_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -69,7 +69,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPassword_incorrectEmail() {
+	public void testGetUserByEmailAndPassword_incorrectEmail_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -87,7 +87,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPassword_incorrectEmailAndPassword() {
+	public void testGetUserByEmailAndPassword_incorrectEmailAndPassword_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -106,7 +106,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPassword_userDoesNotExist() {
+	public void testGetUserByEmailAndPassword_userDoesNotExist_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -155,7 +155,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testSignUpUserAsMember_blankFirstName() {
+	public void testSignUpUserAsMember_blankFirstName_negative() {
 		User user = new User(null, "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
@@ -165,7 +165,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testSignUpUserAsMember_blankLastName() {
+	public void testSignUpUserAsMember_blankLastName_negative() {
 		User user = new User("Jane", null, "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
@@ -175,7 +175,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testSignUpUserAsMember_blankEmail() {
+	public void testSignUpUserAsMember_blankEmail_negative() {
 		User user = new User("Jane", "Doe", null, "Jane!123", "5712561234", "Member");
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
@@ -185,7 +185,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testSignUpUserAsMember_blankPassword() {
+	public void testSignUpUserAsMember_blankPassword_negative() {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", null, "5712561234", "Member");
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
@@ -195,7 +195,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testSignUpUserAsMember_blankPhoneNumber() {
+	public void testSignUpUserAsMember_blankPhoneNumber_negative() {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", null, "Member");
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
@@ -205,7 +205,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testSignUpUserAsMember_blankUserRole() {
+	public void testSignUpUserAsMember_blankUserRole_negative() {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", null);
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
@@ -215,7 +215,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testSignUpUserAsMember_allInPutBlank() {
+	public void testSignUpUserAsMember_allInPutBlank_negative() {
 		User user = new User(null, null, null, null, null, null);
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
@@ -246,7 +246,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByUserId_userIdBlank() {
+	public void testGetUserByUserId_userIdBlank_negative() {
 		User user = new User("Jane", "Doe", "jane_doe@gmail.com", "Jane!123", "5712561234", "Member");
 
 		this.entityManager.persist(user);
@@ -263,7 +263,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByUserId_userDoesNotExist() {
+	public void testGetUserByUserId_userDoesNotExist_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -302,7 +302,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPhoneNumber_incorrectEmail() {
+	public void testGetUserByEmailAndPhoneNumber_incorrectEmail_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -344,7 +344,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPhoneNumber_incorrectEmailAndPhoneNumber() {
+	public void testGetUserByEmailAndPhoneNumber_incorrectEmailAndPhoneNumber_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -365,7 +365,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPhoneNumber_blankPhoneNumber() {
+	public void testGetUserByEmailAndPhoneNumber_blankPhoneNumber_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -385,7 +385,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPhoneNumber_blankEmail() {
+	public void testGetUserByEmailAndPhoneNumber_blankEmail_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -405,7 +405,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPhoneNumber_blankEmailAndblankPhoneNumber() {
+	public void testGetUserByEmailAndPhoneNumber_blankEmailAndblankPhoneNumber_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -426,7 +426,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmailAndPhoneNumber_userDoesNotExist() {
+	public void testGetUserByEmailAndPhoneNumber_userDoesNotExist_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 
@@ -462,7 +462,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmail_incorrectEmailInput() {
+	public void testGetUserByEmail_incorrectEmailInput_negative() {
 		User expected = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(expected);
 
@@ -476,7 +476,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmail_noInputInEmail() {
+	public void testGetUserByEmail_noInputInEmail_negative() {
 		User expected = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(expected);
 
@@ -491,7 +491,7 @@ public class AuthenticationDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetUserByEmail_userDoesNotExist() {
+	public void testGetUserByEmail_userDoesNotExist_negative() {
 		User user = new User("Jane", "Doe", "nedoe@yahoo.com", "disIsMyPassword13", "2039008372", "Member");
 		this.entityManager.persist(user);
 		User expected = this.authDao.getUserByEmail("nedoe@yahoo.com");

@@ -62,6 +62,7 @@ public class RestaurantDao implements RestaurantDaoInterface {
 					Restaurant.class).setParameter("restaurantName", restaurantName)
 					.setParameter("restaurantAddress", restaurantAddress).getSingleResult();
 
+			logger.info("restaurant {}", restaurant);
 			return restaurant;
 		} catch (NoResultException e) {
 			return null;

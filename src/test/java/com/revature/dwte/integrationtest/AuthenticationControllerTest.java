@@ -102,7 +102,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_invalidFirstName() throws Exception {
+	public void testSignUp_invalidFirstName_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -122,7 +122,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_invalidLastName() throws Exception {
+	public void testSignUp_invalidLastName_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -142,7 +142,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_invalidFirstAndLastName() throws Exception {
+	public void testSignUp_invalidFirstAndLastName_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -162,7 +162,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_invalidEmail() throws Exception {
+	public void testSignUp_invalidEmail_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -182,7 +182,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_invalidPhoneNumber() throws Exception {
+	public void testSignUp_invalidPhoneNumber_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -202,7 +202,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_invalidUserRole() throws Exception {
+	public void testSignUp_invalidUserRole_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -222,7 +222,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_blankFirstName() throws Exception {
+	public void testSignUp_blankFirstName_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -242,7 +242,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_blankLastName() throws Exception {
+	public void testSignUp_blankLastName_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -262,7 +262,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_blankEmail() throws Exception {
+	public void testSignUp_blankEmail_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -282,7 +282,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_blankPassword() throws Exception {
+	public void testSignUp_blankPassword_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -302,7 +302,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_blankPhoneNumber() throws Exception {
+	public void testSignUp_blankPhoneNumber_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -322,7 +322,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_blankUserRole() throws Exception {
+	public void testSignUp_blankUserRole_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -342,7 +342,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testSignUp_allInputsBlank() throws Exception {
+	public void testSignUp_allInputsBlank_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -414,7 +414,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testLogIn_invalidEmail() throws Exception {
+	public void testLogIn_invalidEmail_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -433,7 +433,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testLogIn_invalidPassword() throws Exception {
+	public void testLogIn_invalidPassword_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -452,7 +452,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testLogIn_invalidEmailAndPassword() throws Exception {
+	public void testLogIn_invalidEmailAndPassword_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -471,7 +471,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testLogIn_blankEmail() throws Exception {
+	public void testLogIn_blankEmail_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -490,7 +490,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testLogIn_blankPassword() throws Exception {
+	public void testLogIn_blankPassword_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE
@@ -509,7 +509,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	public void testLogIn_blankEmailAndPassword() throws Exception {
+	public void testLogIn_blankEmailAndPassword_negative() throws Exception {
 
 		/*-
 		 *  ARRANGE

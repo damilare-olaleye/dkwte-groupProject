@@ -54,7 +54,7 @@ public class ReviewsDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetAllReviews_reviewsDoesNotExist() {
+	public void testGetAllReviews_reviewsDoesNotExist_negative() {
 
 		// ARRANGE - not required to arrange
 
@@ -101,7 +101,7 @@ public class ReviewsDaoTest {
 
 	@Test
 	@Transactional
-	public void testAddNewReview_blankRating() {
+	public void testAddNewReview_blankRating_negative() {
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
 			this.reviewDao.addNewReview(null, "this place is great", "12-22-21", 1, 1);
@@ -111,7 +111,7 @@ public class ReviewsDaoTest {
 
 	@Test
 	@Transactional
-	public void testAddNewReview_blankSubmittedDate() {
+	public void testAddNewReview_blankSubmittedDate_negative() {
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
 			this.reviewDao.addNewReview("4 stars", "this place is great", null, 1, 1);
@@ -121,7 +121,7 @@ public class ReviewsDaoTest {
 
 	@Test
 	@Transactional
-	public void testAddNewReview_blankRatingAndSubmittedDate() {
+	public void testAddNewReview_blankRatingAndSubmittedDate_negative() {
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
 			this.reviewDao.addNewReview(null, "this place is great", null, 1, 1);
@@ -131,7 +131,7 @@ public class ReviewsDaoTest {
 
 	@Test
 	@Transactional
-	public void testAddNewReview_blankRatingAndReviewDescriptionAndSubmittedDate() {
+	public void testAddNewReview_blankRatingAndReviewDescriptionAndSubmittedDate_negative() {
 
 		Assertions.assertThrows(DataAccessException.class, () -> {
 			this.reviewDao.addNewReview(null, null, null, 1, 1);
@@ -182,7 +182,7 @@ public class ReviewsDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetReviewByReviewId_reviewDoesNotExist() {
+	public void testGetReviewByReviewId_reviewDoesNotExist_negative() {
 
 		Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
 			this.reviewDao.getReviewsByReviewId(1);
@@ -216,7 +216,7 @@ public class ReviewsDaoTest {
 
 	@Test
 	@Transactional
-	public void testGetReviewByRestaurantId_reviewDoesNotExist() {
+	public void testGetReviewByRestaurantId_reviewDoesNotExist_negative() {
 
 		List<Review> expected = this.reviewDao.getReviewsByRestaurantId(1);
 

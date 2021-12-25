@@ -34,7 +34,7 @@ public class RestaurantDao implements RestaurantDaoInterface {
 	}
 
 	@Transactional
-	public Restaurant getRestaurantByRestaurantId(Integer restaurantId) {
+	public Restaurant getRestaurantByRestaurantId(int restaurantId) {
 		logger.info("RestaurantDao.getRestaurantByRestaurantId() invoked");
 
 		try {

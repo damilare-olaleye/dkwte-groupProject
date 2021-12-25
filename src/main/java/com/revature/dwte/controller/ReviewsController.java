@@ -3,6 +3,7 @@ package com.revature.dwte.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -50,7 +51,7 @@ public class ReviewsController {
 
 		try {
 			List<Review> allReviews = reviewService.getAllReview();
-			logger.debug("reviews {} ",allReviews);
+			logger.debug("reviews {} ", allReviews);
 
 			if (allReviews.isEmpty()) {
 				throw new ReviewDoesNotExist();
@@ -119,7 +120,8 @@ public class ReviewsController {
 
 	// everyone can access
 	@GetMapping(path = "/getReviewsByRestaurantId/{restaurantId}")
-	public ResponseEntity<Object> getReviewsByRestaurantId(@PathVariable int restaurantId) {
+	public ResponseEntity<Object> getReviewsByRestaurantId(@PathVariable int restaurantId)
+			throws ReviewDoesNotExist, NoResultException {
 		logger.info("ReviewsController.getReviewsByRestaurantId() invoked");
 
 		try {
@@ -133,6 +135,12 @@ public class ReviewsController {
 		} catch (InvalidParameterException e) {
 
 			return ResponseEntity.status(400).body(e.getMessage());
+		} catch (NoResultException e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+
+		} catch (ReviewDoesNotExist e) {
+			return ResponseEntity.status(400).body(e.getMessage());
+
 		}
 
 	}

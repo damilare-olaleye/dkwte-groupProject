@@ -27,7 +27,7 @@ public class RestaurantService implements RestaurantServiceInterface {
 		return addedRestaurant;
 	}
 
-	public Restaurant getRestaurantByRestaurantId(Integer restaurantId) {
+	public Restaurant getRestaurantByRestaurantId(int restaurantId) {
 		logger.info("RestaurantService.getRestaurantByRestaurantId() invoked");
 
 		Restaurant restaurant = this.restaurantDao.getRestaurantByRestaurantId(restaurantId);

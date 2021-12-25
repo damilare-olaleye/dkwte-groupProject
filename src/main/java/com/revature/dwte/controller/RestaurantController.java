@@ -74,7 +74,7 @@ public class RestaurantController {
 		}
 	}
 
-	@GetMapping(path = "/restaruant/{restaurantId}")
+	@GetMapping(path = "/restaruantById/{restaurantId}")
 	public ResponseEntity<Object> getRestaruatnByRestaurantId(@PathVariable int restaurantId)
 			throws InvalidParameterException {
 		logger.info("RestaurantController.getRestaruatnByRestaurantId() invoked");

@@ -17,6 +17,6 @@ public interface ReviewServiceInterface {
 
 	public Review getReviewByReviewId(int reviewId);
 
-	public List<Review> getReviewsByRestaurantId(int restaurantId);
+	public List<Review> getReviewsByRestaurantId(int restaurantId) throws ReviewDoesNotExist, InvalidParameterException;
 
 }

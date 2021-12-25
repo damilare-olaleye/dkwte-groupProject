@@ -3,7 +3,6 @@ package com.revature.dwte.controller;
 import java.util.Map;
 
 import javax.persistence.NoResultException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revature.dwte.annotation.AdminAndMember;
 import com.revature.dwte.exception.InvalidParameterException;
-import com.revature.dwte.exception.RestaurantDoesNotExist;
 import com.revature.dwte.model.Restaurant;
-import com.revature.dwte.model.User;
 import com.revature.dwte.service.RestaurantService;
 import com.revature.dwte.utility.ValidateUtil;
 
@@ -33,26 +29,14 @@ public class RestaurantController {
 	private RestaurantService restaurantService;
 
 	@Autowired
-	private HttpServletRequest req;
-
-	@Autowired
 	private ValidateUtil validateUtil;
 
-	private static final String CURRENTUSER = "currentuser";
-
 	@PostMapping(path = "/restaurant")
-	@AdminAndMember
 	public ResponseEntity<Object> addRestaurant(@RequestBody Map<String, String> json)
 			throws InvalidParameterException {
 		logger.info("RestaurantController.addRestaurant() invoked");
 
 		try {
-
-			User currentlyLoggedInUser = (User) req.getSession().getAttribute(CURRENTUSER);
-
-			if (currentlyLoggedInUser == null) {
-				return ResponseEntity.status(401).body("You are not logged in, please log in to continue");
-			}
 
 			validateUtil.verifyAddRestaurant(json.get("restaurantName"), json.get("restaurantAddress"));
 
@@ -69,7 +53,7 @@ public class RestaurantController {
 
 	@GetMapping(path = "/restaurant")
 	public ResponseEntity<Object> getRestaurant(@RequestBody Map<String, String> json)
-			throws RestaurantDoesNotExist, InvalidParameterException {
+			throws InvalidParameterException {
 		logger.info("RestaurantController.getRestaurantId() invoked");
 
 		try {

@@ -13,7 +13,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.revature.dwte.model.Review;
-import com.revature.dwte.model.User;
 
 @Repository
 public class ReviewsDao implements ReviewsDaoInterface {
@@ -95,9 +94,10 @@ public class ReviewsDao implements ReviewsDaoInterface {
 
 	@Transactional
 	public List<Review> getReviewsByRestaurantId(int restaurantId) {
-		logger.info("ReviewsDao.getReviewsByReviewId() invoked");
+		logger.info("ReviewsDao.getReviewsByRestaurantId() invoked");
 
 		try {
+
 			List<Review> reviews = entityManager
 					.createQuery("FROM Review r WHERE r.restaurantId = :restaurantId", Review.class)
 					.setParameter("restaurantId", restaurantId).getResultList();
@@ -105,6 +105,9 @@ public class ReviewsDao implements ReviewsDaoInterface {
 			return reviews;
 		} catch (DataAccessException e) {
 			return null;
+		} catch (NoResultException e) {
+			return null;
+
 		}
 	}
 }

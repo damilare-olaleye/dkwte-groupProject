@@ -27,7 +27,7 @@ public class ReviewService implements ReviewServiceInterface {
 	private ReviewsDao reviewDao;
 
 	public List<Review> getAllReview() throws ReviewDoesNotExist, InvalidParameterException {
-		logger.info("ReviewService.getReviews() invoked");
+		logger.info("ReviewService.getAllReview() invoked");
 
 		List<Review> reviews = this.reviewDao.getAllReviews();
 
@@ -76,12 +76,23 @@ public class ReviewService implements ReviewServiceInterface {
 		return review;
 	}
 
-	public List<Review> getReviewsByRestaurantId(int restaurantId) {
+	public List<Review> getReviewsByRestaurantId(int restaurantId)
+			throws ReviewDoesNotExist, InvalidParameterException {
 		logger.info("ReviewService.getReviewsByRestaurantId() invoked");
 
 		List<Review> reviews = this.reviewDao.getReviewsByRestaurantId(restaurantId);
 
-		return reviews;
+		try {
+			if (reviews.isEmpty()) {
+				throw new ReviewDoesNotExist("No reviews on file for restaurant with Id of " + restaurantId + ".");
+			}
+
+			return reviews;
+
+		} catch (DataAccessException e) {
+
+			throw new InvalidParameterException("No reviews on file for restaurant with Id of " + restaurantId + ".");
+		}
 	}
 
 }

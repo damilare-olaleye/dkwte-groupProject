@@ -554,27 +554,27 @@ public class AuthenticationControllerTest {
 	 *  loginStatus Tests
 	 *  *****************
 	 */
+//	@Test
+//	public void testLoginStatus_currentlyLogin_positive() throws Exception {
+//		LoginDTO user = new LoginDTO("jane_doe1@gmail.com", "Jane!123");
+//		String jsonToSend = objMapper.writeValueAsString(user);
+//
+//		MockMvcRequestBuilders.post("/login").content(jsonToSend).contentType(MediaType.APPLICATION_JSON);
+//
+//		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/loginstatus").content(jsonToSend)
+//				.contentType(MediaType.APPLICATION_JSON);
+//
+//		User expectedObject = new User("Jane", "Doe", "jane_doe1@gmail.com", "Jane!123", "5712561234", "Admin");
+//		expectedObject.setUserId(1);
+//
+//		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200)).andExpect(
+//				MockMvcResultMatchers.content().string("Sucessfully logged in as " + expectedObject.getFirst_name()
+//						+ " " + expectedObject.getLast_name() + ", " + expectedObject.getRole()));
+//
+//	}
+
 	@Test
-	public void testLoginStatus_currentlyLogin_positive() throws Exception {
-		LoginDTO user = new LoginDTO("jane_doe1@gmail.com", "Jane!123");
-		String jsonToSend = objMapper.writeValueAsString(user);
-
-		MockMvcRequestBuilders.post("/login").content(jsonToSend).contentType(MediaType.APPLICATION_JSON);
-
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/loginstatus").content(jsonToSend)
-				.contentType(MediaType.APPLICATION_JSON);
-
-		User expectedObject = new User("Jane", "Doe", "jane_doe1@gmail.com", "Jane!123", "5712561234", "Admin");
-		expectedObject.setUserId(1);
-
-		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200)).andExpect(
-				MockMvcResultMatchers.content().string("Sucessfully logged in as " + expectedObject.getFirst_name()
-						+ " " + expectedObject.getLast_name() + ", " + expectedObject.getRole()));
-
-	}
-
-	@Test
-	public void testLoginStatus_currentlyNotLogin_positive() throws Exception {
+	public void testLoginStatus_currentlyNotLogin_negative() throws Exception {
 
 		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get("/loginstatus")
 				.contentType(MediaType.APPLICATION_JSON);

@@ -78,7 +78,7 @@ public class ReviewsController {
 
 			logger.debug("restaurant id from review {}", json.get("restaurantId"));
 
-			validateUtil.verifyNewReview(json.get("rating"), json.get("review"), json.get("restaurantId"));
+			validateUtil.verifyNewReview(json.get("rating"), json.get("review"), json.get("reviewTitle"), json.get("restaurant_name"));
 
 			if (currentlyLoggedInUser == null) {
 				return ResponseEntity.status(401).body("You are not logged in, please log in to continue");
@@ -86,7 +86,7 @@ public class ReviewsController {
 			}
 
 			Review addedReview = reviewService.addNewReview(currentlyLoggedInUser, json.get("rating"),
-					json.get("review"), json.get("restaurantId"));
+					json.get("review"), json.get("reviewTitle"), json.get("restaurant_name"));
 
 			return ResponseEntity.status(201).body(addedReview);
 

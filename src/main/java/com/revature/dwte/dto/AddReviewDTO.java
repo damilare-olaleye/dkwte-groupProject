@@ -11,20 +11,20 @@ public class AddReviewDTO {
 	private String ratings;
 	private String review;
 	private Timestamp submittedDate;
-	private Restaurant resturantsId;
+	private Restaurant restaurant_name;
 	private User authorId;
 	
 	public AddReviewDTO() {
 		super();
 	}
 
-	public AddReviewDTO(String ratings, String review, Timestamp submittedDate, Restaurant resturantsId,
+	public AddReviewDTO(String ratings, String review, Timestamp submittedDate, Restaurant restaurant_name,
 			User authorId) {
 		super();
 		this.ratings = ratings;
 		this.review = review;
 		this.submittedDate = submittedDate;
-		this.resturantsId = resturantsId;
+		this.restaurant_name = restaurant_name;
 		this.authorId = authorId;
 	}
 
@@ -52,12 +52,12 @@ public class AddReviewDTO {
 		this.submittedDate = submittedDate;
 	}
 
-	public Restaurant getResturantsId() {
-		return resturantsId;
+	public Restaurant getRestaurant_name() {
+		return restaurant_name;
 	}
 
-	public void setResturantsId(Restaurant resturantsId) {
-		this.resturantsId = resturantsId;
+	public void setRestaurant_name(Restaurant restaurant_name) {
+		this.restaurant_name = restaurant_name;
 	}
 
 	public User getAuthorId() {
@@ -69,8 +69,14 @@ public class AddReviewDTO {
 	}
 
 	@Override
+	public String toString() {
+		return "AddReviewDTO [ratings=" + ratings + ", review=" + review + ", submittedDate=" + submittedDate
+				+ ", restaurant_name=" + restaurant_name + ", authorId=" + authorId + "]";
+	}
+
+	@Override
 	public int hashCode() {
-		return Objects.hash(authorId, ratings, resturantsId, review, submittedDate);
+		return Objects.hash(authorId, ratings, restaurant_name, review, submittedDate);
 	}
 
 	@Override
@@ -83,15 +89,10 @@ public class AddReviewDTO {
 			return false;
 		AddReviewDTO other = (AddReviewDTO) obj;
 		return Objects.equals(authorId, other.authorId) && Objects.equals(ratings, other.ratings)
-				&& Objects.equals(resturantsId, other.resturantsId) && Objects.equals(review, other.review)
+				&& Objects.equals(restaurant_name, other.restaurant_name) && Objects.equals(review, other.review)
 				&& Objects.equals(submittedDate, other.submittedDate);
 	}
 
-	@Override
-	public String toString() {
-		return "AddReviewDTO [ratings=" + ratings + ", review=" + review + ", submittedDate=" + submittedDate
-				+ ", resturantsId=" + resturantsId + ", authorId=" + authorId + "]";
-	}
-
+	
 	
 }

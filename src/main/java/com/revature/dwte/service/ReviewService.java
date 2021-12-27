@@ -45,19 +45,18 @@ public class ReviewService implements ReviewServiceInterface {
 
 	}
 
-	public Review addNewReview(User currentlyLoggedInUser, String rating, String review, String restaurantId) {
+	public Review addNewReview(User currentlyLoggedInUser, String rating, String review, String review_Title, String restaurantName) {
 		logger.info("ReviewService.addNewReview() invoked");
 
 		String ratingInput = rating.trim() + " stars";
 		String experienceReview = review.trim();
+		String reviewTitle = review_Title.trim();
+		String restaurant_name = restaurantName.trim();
 		String submittedDate = dateFormat.format(new Date(System.currentTimeMillis()));
 
 		int authorId = currentlyLoggedInUser.getUserId();
 
-		Integer restaurantIdInput = Integer.parseInt(restaurantId);
-
-		Review addedReview = this.reviewDao.addNewReview(ratingInput, experienceReview, submittedDate,
-				restaurantIdInput, authorId);
+		Review addedReview = this.reviewDao.addNewReview(ratingInput, experienceReview, submittedDate, authorId, reviewTitle, restaurant_name);
 
 		return addedReview;
 	}

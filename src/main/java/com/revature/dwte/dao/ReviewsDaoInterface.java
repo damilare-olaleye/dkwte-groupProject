@@ -10,8 +10,8 @@ public interface ReviewsDaoInterface {
 
 	public List<Review> getAllReviews();
 
-	public Review addNewReview(String rating, String experienceReview, String submittedDate, int restaurantId,
-			int authorId);
+	public Review addNewReview(String rating, String experienceReview, String submittedDate,
+			int authorId, String reviewTitle, String restaurant_name);
 
 	public void deleteReviews(int reviewId);
 

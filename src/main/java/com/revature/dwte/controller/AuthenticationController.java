@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -35,6 +36,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private HttpServletRequest req;
+	
+	@Autowired
+	private HttpServletResponse res;
 
 	@Autowired
 	private ValidateUtil validateUtil;
@@ -69,9 +73,16 @@ public class AuthenticationController {
 
 			HttpSession session = req.getSession();
 			session.setAttribute(CURRENTUSER, user);
+			
+//			/*
+//			 * SameSite=None requires Https to be enabled for the backend
+//			 */
+//			String originalSetCookieHeader = res.getHeader("Set-Cookie");
+//			String newCookieHeader = originalSetCookieHeader + "; SameSite=None; Secure";
+//			res.setHeader("Set-Cookie", newCookieHeader);
+			
 
-			return ResponseEntity.status(200).body("Sucessfully logged in as " + user.getFirst_name() + " "
-					+ user.getLast_name() + ", " + user.getRole());
+			return ResponseEntity.status(200).body(user);
 
 		} catch (NoResultException e) {
 			return ResponseEntity.status(400).body(e.getMessage());

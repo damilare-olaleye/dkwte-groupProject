@@ -268,7 +268,7 @@ public class ValidateUtil {
 
 	}
 
-	public void verifyNewReview(String rating, String review, String restaurantId) throws InvalidParameterException {
+	public void verifyNewReview(String rating, String review, String reviewTitle, String restaurant_name) throws InvalidParameterException {
 		logger.info("ValidteUtil.verifyNewReview() invoked");
 
 		/*-
@@ -283,12 +283,21 @@ public class ValidateUtil {
 			blankInputString.append("Rating");
 			blankInputBoolean = true;
 		}
-		if (StringUtils.isBlank(restaurantId)) {
+		if (StringUtils.isBlank(reviewTitle)) {
 			if (blankInputBoolean) {
-				blankInputString.append(", restaurant ID");
+				blankInputString.append(", review Title");
 				blankInputBoolean = true;
 			} else {
-				blankInputString.append("Restaurant ID");
+				blankInputString.append("review Title");
+				blankInputBoolean = true;
+			}
+		}
+		if (StringUtils.isBlank(restaurant_name)) {
+			if (blankInputBoolean) {
+				blankInputString.append(", restaurant Name");
+				blankInputBoolean = true;
+			} else {
+				blankInputString.append("restaurant Name");
 				blankInputBoolean = true;
 			}
 		}
@@ -298,20 +307,16 @@ public class ValidateUtil {
 			throw new InvalidParameterException(blankInputString.toString());
 		}
 
-		Integer restaurantIdInput = Integer.parseInt(restaurantId);
-
-		logger.debug("restaurantId {}", restaurantIdInput);
-
 		/*-
 		 *  check if restaurant exist
 		 */
 		logger.info("check if restaurant exist");
 
-		Restaurant databaseRestaurant = restaurantService.getRestaurantByRestaurantId(restaurantIdInput);
+//		Restaurant databaseRestaurant = restaurantService.getRestaurantByRestaurantId(restaurantId);
 
-		if (databaseRestaurant == null) {
-			throw new InvalidParameterException("Restaurant with the ID of " + restaurantIdInput + " does not exist.");
-		}
+//		if (databaseRestaurant == null) {
+//			throw new InvalidParameterException("Restaurant with the ID of " + restaurantId + " does not exist.");
+//		}
 
 		/*-
 		 *  verify rating

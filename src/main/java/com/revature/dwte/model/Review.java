@@ -21,6 +21,9 @@ public class Review {
 	@Column(name = "review")
 	private String review;
 
+	@Column(name = "reviewTitle")
+	private String reviewTitle;
+
 	@Column(name = "submit_date", updatable = false, nullable = false)
 	private String submittedDate;
 
@@ -28,8 +31,8 @@ public class Review {
 	private Restaurant restaurant;
 
 	// creating column for restaurant ID and make it a foreign key
-	@Column(name = "restaurant_id")
-	private int restaurantId;
+	@Column(name = "restaurant_name")
+	private String restaurant_name;
 
 	@ManyToOne
 	private User author;
@@ -42,15 +45,18 @@ public class Review {
 		super();
 	}
 
-	public Review(String ratings, String review, String submittedDate, int restaurantId, int authorId) {
+	public Review(String ratings, String review, String submittedDate, int authorId,
+			String reviewTitle, String restaurant_name) {
 		super();
 		this.ratings = ratings;
 		this.review = review;
 		this.submittedDate = submittedDate;
-		this.restaurantId = restaurantId;
+		this.restaurant_name = restaurant_name;
 		this.authorId = authorId;
+		this.reviewTitle = reviewTitle;
 	}
 
+	
 	public int getReviewId() {
 		return reviewId;
 	}
@@ -75,6 +81,14 @@ public class Review {
 		this.review = review;
 	}
 
+	public String getReviewTitle() {
+		return reviewTitle;
+	}
+
+	public void setReviewTitle(String reviewTitle) {
+		this.reviewTitle = reviewTitle;
+	}
+
 	public String getSubmittedDate() {
 		return submittedDate;
 	}
@@ -91,12 +105,12 @@ public class Review {
 		this.restaurant = restaurant;
 	}
 
-	public int getRestaurantId() {
-		return restaurantId;
+	public String getRestaurant_name() {
+		return restaurant_name;
 	}
 
-	public void setRestaurantId(int restaurantId) {
-		this.restaurantId = restaurantId;
+	public void setRestaurant_name(String restaurant_name) {
+		this.restaurant_name = restaurant_name;
 	}
 
 	public User getAuthor() {
@@ -123,10 +137,11 @@ public class Review {
 		result = prime * result + authorId;
 		result = prime * result + ((ratings == null) ? 0 : ratings.hashCode());
 		result = prime * result + ((restaurant == null) ? 0 : restaurant.hashCode());
-		result = prime * result + restaurantId;
+		result = prime * result + ((restaurant_name == null) ? 0 : restaurant_name.hashCode());
 		result = prime * result + ((review == null) ? 0 : review.hashCode());
 		result = prime * result + reviewId;
 		result = prime * result + ((submittedDate == null) ? 0 : submittedDate.hashCode());
+		result = prime * result + ((reviewTitle == null) ? 0 : reviewTitle.hashCode());
 		return result;
 	}
 
@@ -156,13 +171,20 @@ public class Review {
 				return false;
 		} else if (!restaurant.equals(other.restaurant))
 			return false;
-		if (restaurantId != other.restaurantId)
+		if (restaurant_name != other.restaurant_name)
 			return false;
 		if (review == null) {
 			if (other.review != null)
 				return false;
 		} else if (!review.equals(other.review))
 			return false;
+
+		if (reviewTitle == null) {
+			if (other.reviewTitle != null)
+				return false;
+		} else if (!reviewTitle.equals(other.reviewTitle))
+			return false;
+
 		if (reviewId != other.reviewId)
 			return false;
 		if (submittedDate == null) {
@@ -175,9 +197,13 @@ public class Review {
 
 	@Override
 	public String toString() {
-		return "Review [reviewId=" + reviewId + ", ratings=" + ratings + ", review=" + review + ", submittedDate="
-				+ submittedDate + ", restaurant=" + restaurant + ", restaurantId=" + restaurantId + ", author=" + author
-				+ ", authorId=" + authorId + "]";
+		return "Review [reviewId=" + reviewId + ", ratings=" + ratings + ", review=" + review + ", reviewTitle="
+				+ reviewTitle + ", submittedDate=" + submittedDate + ", restaurant=" + restaurant + ", restaurant_name="
+				+ restaurant_name + ", author=" + author + ", authorId=" + authorId + "]";
 	}
+
+
+
+	
 
 }

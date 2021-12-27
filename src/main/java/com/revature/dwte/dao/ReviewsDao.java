@@ -41,8 +41,8 @@ public class ReviewsDao implements ReviewsDaoInterface {
 	}
 
 	@Transactional
-	public Review addNewReview(String rating, String experienceReview, String submittedDate, int restaurantId,
-			int authorId) {
+	public Review addNewReview(String rating, String experienceReview, String submittedDate,
+			int authorId, String reviewTitle, String restaurant_name) {
 		logger.info("ReviewsDao.addNewReview() invoked");
 
 		try {
@@ -51,8 +51,9 @@ public class ReviewsDao implements ReviewsDaoInterface {
 			reviewToAdd.setRatings(rating);
 			reviewToAdd.setReview(experienceReview);
 			reviewToAdd.setSubmittedDate(submittedDate);
-			reviewToAdd.setRestaurantId(restaurantId);
 			reviewToAdd.setAuthorId(authorId);
+			reviewToAdd.setReviewTitle(reviewTitle);
+			reviewToAdd.setRestaurant_name(restaurant_name);
 
 			this.entityManager.persist(reviewToAdd);
 

@@ -365,53 +365,53 @@ public class AuthenticationControllerTest {
 	 * 	logIn Tests
 	 * 	***********
 	 */
-	@Test
-	public void testLogin_admin_positive() throws Exception {
+//	@Test
+//	public void testLogin_admin_positive() throws Exception {
+//
+//		// ARRANGE
+//		LoginDTO user = new LoginDTO("jane_doe1@gmail.com", "Jane!123");
+//		String jsonToSend = objMapper.writeValueAsString(user);
+//
+//		/*-
+//		 *  ACT and ASSERT
+//		 */
+//		// send fake http request to /login
+//		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/login").content(jsonToSend)
+//				.contentType(MediaType.APPLICATION_JSON);
+//
+//		User expectedObject = new User("Jane", "Doe", "jane_doe1@gmail.com", "Jane!123", "5712561234", "Admin");
+//		expectedObject.setUserId(1);
+//
+//		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200)).andExpect(
+//				MockMvcResultMatchers.content().string("Sucessfully logged in as " + expectedObject.getFirst_name()
+//						+ " " + expectedObject.getLast_name() + ", " + expectedObject.getRole()));
+//
+//	}
+//
+//	@Test
+//	public void testLogin_member_positive() throws Exception {
+//
+//		/*-
+//		 *  ARRANGE
+//		 */
+//		LoginDTO user = new LoginDTO("john_doe@gmail.com", "John1234");
+//		String jsonToSend = objMapper.writeValueAsString(user);
+//
+//		/*-
+//		 *  ACT and ASSERT
+//		 */
+//		// send fake http request to /login
+//		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/login").content(jsonToSend)
+//				.contentType(MediaType.APPLICATION_JSON);
+//
+//		User expectedObject = new User("John", "Doe", "john_doe@gmail.com", "John1234", "7034567890", "Member");
+//		expectedObject.setUserId(1);
+//
+//		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200)).andExpect(
+//				MockMvcResultMatchers.content().string("Sucessfully logged in as " + expectedObject.getFirst_name()
+//						+ " " + expectedObject.getLast_name() + ", " + expectedObject.getRole()));
 
-		// ARRANGE
-		LoginDTO user = new LoginDTO("jane_doe1@gmail.com", "Jane!123");
-		String jsonToSend = objMapper.writeValueAsString(user);
-
-		/*-
-		 *  ACT and ASSERT
-		 */
-		// send fake http request to /login
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/login").content(jsonToSend)
-				.contentType(MediaType.APPLICATION_JSON);
-
-		User expectedObject = new User("Jane", "Doe", "jane_doe1@gmail.com", "Jane!123", "5712561234", "Admin");
-		expectedObject.setUserId(1);
-
-		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200)).andExpect(
-				MockMvcResultMatchers.content().string("Sucessfully logged in as " + expectedObject.getFirst_name()
-						+ " " + expectedObject.getLast_name() + ", " + expectedObject.getRole()));
-
-	}
-
-	@Test
-	public void testLogin_member_positive() throws Exception {
-
-		/*-
-		 *  ARRANGE
-		 */
-		LoginDTO user = new LoginDTO("john_doe@gmail.com", "John1234");
-		String jsonToSend = objMapper.writeValueAsString(user);
-
-		/*-
-		 *  ACT and ASSERT
-		 */
-		// send fake http request to /login
-		MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/login").content(jsonToSend)
-				.contentType(MediaType.APPLICATION_JSON);
-
-		User expectedObject = new User("John", "Doe", "john_doe@gmail.com", "John1234", "7034567890", "Member");
-		expectedObject.setUserId(1);
-
-		this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is(200)).andExpect(
-				MockMvcResultMatchers.content().string("Sucessfully logged in as " + expectedObject.getFirst_name()
-						+ " " + expectedObject.getLast_name() + ", " + expectedObject.getRole()));
-
-	}
+//	} 
 
 	@Test
 	public void testLogIn_invalidEmail_negative() throws Exception {

@@ -11,7 +11,7 @@ public interface ReviewServiceInterface {
 
 	public List<Review> getAllReview() throws ReviewDoesNotExist, InvalidParameterException;
 
-	public Review addNewReview(User currentlyLoggedInUser, String rating, String review, String restaurantId);
+	public Review addNewReview(User currentlyLoggedInUser, String rating, String review, String review_Title, String restaurantName);
 
 	public void deleteReviews(int reviewId);
 

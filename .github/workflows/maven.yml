@@ -36,4 +36,4 @@ jobs:
           db_url: ${{secrets.db_url}}
           db_password: ${{secrets.db_password}}
           db_username: ${{secrets.db_username}}
-        run: mvn -f ./pom.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=damilare-olaleye_damilare-olaleye-project-one
+        run: mvn -f ./pom.xml -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=damilare-olaleye_dkwte-groupProject
